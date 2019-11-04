@@ -1,0 +1,37 @@
+body {
+  background-color: #f0f5f9;
+}
+
+.Nav {
+  padding: 40px;
+}
+
+.link {
+  font-size: 18px;
+  font-weight: 600;
+  color: #00334e;
+}
+
+/* .App {
+  background-color: #f2f6f5;
+  text-align: center;
+} */
+
+/* .App-logo {
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #c8dad3;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #c8dad3;
+}
+
+.App-link {
+  color: #09d3ac;
+} */

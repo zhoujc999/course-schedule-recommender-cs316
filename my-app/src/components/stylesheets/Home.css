@@ -1,0 +1,16 @@
+.jumbo {
+  background-color: #f0f5f9;
+  text-align: center;
+}
+
+.heading {
+  margin-top: 140px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 600;
+  font-size: 44px;
+}
+
+.form {
+  margin: 60px auto 40px;
+  width: 50%;
+}
