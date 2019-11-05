@@ -16,7 +16,6 @@ import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -139,5 +138,5 @@ django_heroku.settings(locals())
 STATIC_URL = '/static/'
 
 # Place static in the same location as webpack build files
-STATIC_ROOT = os.path.join(BASE_DIR, 'build', 'static')
-STATICFILES_DIRS = []
+#  STATIC_ROOT = os.path.join(BASE_DIR, 'build','static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'build','static')]

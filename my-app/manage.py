@@ -3,6 +3,7 @@
 import os
 import sys
 
+sys.path.append('/home/vcm/.cache/pypoetry/virtualenvs/my-app-py3.6/lib/python3.6/site-packages')
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')

@@ -2,7 +2,7 @@
 name = "my-app"
 version = "0.1.0"
 description = ""
-authors = ["CS 316"]
+authors = ["cs316"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
