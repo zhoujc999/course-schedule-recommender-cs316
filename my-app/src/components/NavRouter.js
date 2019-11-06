@@ -15,13 +15,13 @@ class NavRouter extends Component {
         <div>
           <Nav className="Nav" defaultActiveKey="/" as="ul">
             <Nav.Item as="li">
-              <Nav.Link className="link" href="/"><i class="fas fa-home"></i> Home</Nav.Link>
+              <Nav.Link className="link" href="/"><i className="fas fa-home"></i> Home</Nav.Link>
             </Nav.Item>
             <Nav.Item as="li">
-              <Nav.Link className="link" href="/login"><i class="fas fa-sign-in-alt"></i> Log In</Nav.Link>
+              <Nav.Link className="link" href="/login"><i className="fas fa-sign-in-alt"></i> Log In</Nav.Link>
             </Nav.Item>
             <Nav.Item as="li">
-              <Nav.Link className="link" href="/signup"><i class="fas fa-user-plus"></i> Sign up</Nav.Link>
+              <Nav.Link className="link" href="/signup"><i className="fas fa-user-plus"></i> Sign up</Nav.Link>
             </Nav.Item>
           </Nav>
 
