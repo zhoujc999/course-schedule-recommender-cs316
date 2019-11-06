@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import django_heroku
+import dj_database_url
+import dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -89,6 +91,8 @@ DATABASES = {
     }
 }
 
+#Michael
+#DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 #  DATABASES = {
     #  'default': {
         #  'ENGINE': 'django.db.backends.sqlite3',
@@ -135,8 +139,14 @@ django_heroku.settings(locals())
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+#Michael
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 STATIC_URL = '/static/'
 
 # Place static in the same location as webpack build files
 #  STATIC_ROOT = os.path.join(BASE_DIR, 'build','static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'build','static')]
+
+#Michael
+#del DATABASES['default']['OPTIONS']['sslmode']
