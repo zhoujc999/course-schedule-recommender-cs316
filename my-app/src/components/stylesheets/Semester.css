@@ -1,0 +1,11 @@
+.semester {
+  background-color: green;
+  margin: 20px 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.semester_text {
+  font-size: 18px;
+  color: white;
+}

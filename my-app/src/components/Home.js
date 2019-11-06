@@ -9,9 +9,10 @@ class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      plan:[]
-    };
+    this.state = {plan:[]};
+    // this.state = {
+      // plan:["Computer Science B.S."]
+    // };
   }
 
   renderJumbo() {
@@ -31,7 +32,9 @@ class Home extends Component {
   renderPlan() {
     const plan = this.state.plan;
     return (
-      <Plan input={plan} />
+      <div className="plans">
+        <Plan input={plan} />
+      </div>
     );
   }
 

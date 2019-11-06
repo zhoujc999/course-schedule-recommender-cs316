@@ -1,0 +1,9 @@
+.plan {
+  background-color: blue;
+  margin: 20px 0px;
+  padding: 5px;
+}
+
+.plan_text {
+  font-size: 24px;
+}
