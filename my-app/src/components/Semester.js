@@ -1,8 +1,12 @@
-import React, { Component } from "react";
-import Course from './Course';
 import './stylesheets/Semester.css';
+import Course from './Course';
+import React, { Component } from "react";
 
 class Semester extends Component {
+  /* Semester components that make up individual plans
+  and which are made up of a series of courses, all received
+  from database (semester and course table) passed here */
+  //Semester creates multiple Course components
 
   render() {
     const {course_data, semester_number} = this.props;

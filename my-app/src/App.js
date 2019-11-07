@@ -1,14 +1,8 @@
-import React, { Component } from 'react';
-import NavRouter from './components/NavRouter';
 import './components/stylesheets/App.css';
-
+import NavRouter from './components/NavRouter';
+import React, { Component } from 'react';
 
 class App extends Component {
-
-  constructor(props){
-    super(props);
-    this.state = {};
-  }
 
   render() {
     return (
