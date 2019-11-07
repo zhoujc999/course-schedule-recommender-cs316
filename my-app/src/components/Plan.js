@@ -8,7 +8,7 @@ const SEMESTER_DATA = [["Course 1", "Course 2"], ["Course 1"], ["Course 1"], ["C
 class Plan extends Component {
 
   render() {
-    const {input} = this.props;
+    const { input } = this.props;
     const semesters = [];
     for (let i = 0; i < SEMESTER_DATA.length; i++) {
       semesters.push(
@@ -21,7 +21,7 @@ class Plan extends Component {
     return (
       <div>
         <div className="plan_text">
-          {input}
+          {input.label}
           </div>
           <div className="plan">
           {semesters}
