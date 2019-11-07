@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .views import index
+import recommender.views as rec_views
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('login', index, name='index'),
-    path('signup', index, name='index'),
+    path('', rec_views.index, name='index'),
+    path('login', rec_views.index, name='index'),
+    path('signup', rec_views.index, name='index'),
+    path('api/hello/', rec_views.HelloView.as_view(), name='hello'),
     path('admin/', admin.site.urls),
 ]
