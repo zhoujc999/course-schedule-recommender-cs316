@@ -15,13 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import include
 
-import recommender.views as rec_views
+from rest_framework import routers
+
+import recommender.views as recommender_views
+
+router = routers.DefaultRouter()
+router.register(r'programs', recommender_views.ProgramView, 'program')
+
 
 urlpatterns = [
-    path('', rec_views.index, name='index'),
-    path('login', rec_views.index, name='index'),
-    path('signup', rec_views.index, name='index'),
-    path('api/hello/', rec_views.HelloView.as_view(), name='hello'),
+    path('', recommender_views.index, name='index'),
+    path('login', recommender_views.index, name='index'),
+    path('signup', recommender_views.index, name='index'),
+    path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
 ]
