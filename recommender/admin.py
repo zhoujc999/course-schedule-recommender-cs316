@@ -1,5 +1,9 @@
 from django.contrib import admin
-from recommender.models import Class, Program, Student, Semester, Completed
+from recommender.models import Class,       \
+                               Program,     \
+                               Student,     \
+                               Semester,    \
+                               Completed
 
 # Register your models here.
 admin.site.register(Class)

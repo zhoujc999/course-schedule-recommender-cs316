@@ -19,16 +19,20 @@ from django.urls import include
 
 from rest_framework import routers
 
-import recommender.views as recommender_views
+import recommender.views as RecommenderViews
 
 router = routers.DefaultRouter()
-router.register(r'programs', recommender_views.ProgramView, 'program')
+router.register(r'programs', RecommenderViews.ProgramView, 'program')
+router.register(r'classes', RecommenderViews.ClassView, 'class')
+router.register(r'students', RecommenderViews.StudentView, 'student')
+router.register(r'semesters', RecommenderViews.SemesterView, 'semester')
+router.register(r'completeds', RecommenderViews.CompletedView, 'completed')
 
 
 urlpatterns = [
-    path('', recommender_views.index, name='index'),
-    path('login', recommender_views.index, name='index'),
-    path('signup', recommender_views.index, name='index'),
+    path('', RecommenderViews.index, name='index'),
+    path('login', RecommenderViews.index, name='index'),
+    path('signup', RecommenderViews.index, name='index'),
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
 ]
