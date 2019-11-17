@@ -15,12 +15,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import include
 
-from .views import index
+from rest_framework import routers
+
+import recommender.views as RecommenderViews
+
+router = routers.DefaultRouter()
+router.register(r'programs', RecommenderViews.ProgramView, 'program')
+router.register(r'classes', RecommenderViews.ClassView, 'class')
+router.register(r'students', RecommenderViews.StudentView, 'student')
+router.register(r'semesters', RecommenderViews.SemesterView, 'semester')
+router.register(r'completeds', RecommenderViews.CompletedView, 'completed')
+
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('login', index, name='index'),
-    path('signup', index, name='index'),
+    path('', RecommenderViews.index, name='index'),
+    path('login', RecommenderViews.index, name='index'),
+    path('signup', RecommenderViews.index, name='index'),
+    path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
 ]

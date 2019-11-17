@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
 
+    # Our App
+    'recommender',
+
     # 3rd party apps
     'rest_framework',
 ]
