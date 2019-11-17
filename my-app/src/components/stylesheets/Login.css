@@ -1,0 +1,13 @@
+#login {
+  width: 40%;
+  margin: 100px auto;
+}
+
+#signup-link {
+  margin-top: 0;
+  text-align: center;
+}
+
+.form-elem-top {
+  margin-top: 10px;
+}

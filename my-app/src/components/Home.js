@@ -36,7 +36,7 @@ class Home extends Component {
       <div id="home">
         <Jumbotron className="jumbo">
           <h1 className="heading">Chart your four-year path here</h1>
-          <div className="major-select">
+          <div className="major-select search-bar">
             <Select
               multi
               clearable
@@ -47,13 +47,15 @@ class Home extends Component {
               onChange={(values) => this.setState({selected:values})}
               onCreateNew={(value) => this.setState({selected:[...this.state.selected, value]})}
             />
-            <Button
-              type="submit"
-              onClick={()=>this.handleSearchPlans()}
-              variant="outline-info"
-            >
-              Search Academic Plans
-            </Button>
+            </div>
+            <div className="btn">
+              <Button
+                type="submit"
+                onClick={()=>this.handleSearchPlans()}
+                variant="outline-info"
+              >
+                Search Academic Plans
+              </Button>
           </div>
         </Jumbotron>
       </div>
