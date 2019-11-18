@@ -1,0 +1,67 @@
+.page_container {
+  width: 90%;
+  margin: 10px auto 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.account_container {
+  color: #00334e;
+  margin: 0px 10px;
+  font-size: 24px;
+}
+
+.account_filled {
+}
+
+.account_empty {
+  background-color: gray;
+}
+
+.account_user {
+  display: flex;
+  flex-direction: row;
+}
+
+.account_netid {
+  padding-right: 40px;
+}
+
+.account_email {
+  padding-left: 40px;
+}
+
+.account_bio {
+  padding: 20px 0px;
+}
+
+.completed_container {
+  color: #00334e;
+  margin: 0px 10px;
+  font-size: 24px;
+}
+
+.completed_filled {
+}
+
+.completed_empty {
+  background-color: blue;
+}
+
+.completed_program {
+  display: flex;
+  flex-direction: row;
+}
+
+.completed_name {
+  padding-right: 40px;
+}
+
+.completed_type {
+  padding-left: 40px;
+}
+
+.semester_container {
+  background-color: purple;
+  margin: 10px;
+}
