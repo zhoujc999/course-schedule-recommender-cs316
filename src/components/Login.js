@@ -49,7 +49,7 @@ class Login extends Component {
 
         // TODO: change redirect URL after successful login
         if (this.state.isLoggedIn) {
-          this.props.history.push('/');
+          this.props.history.push('/account');
         }
       })
       .catch(err => {

@@ -42,7 +42,7 @@ class Signup extends Component {
         });
       // TODO: change redirect URL after successful signup
         if (this.state.isAuthed) {
-          this.props.history.push("/");
+          this.props.history.push("/account");
         }
       })
       .catch(err => {
@@ -54,7 +54,7 @@ class Signup extends Component {
 
   render() {
     const isInvalid = this.state.password1 !== this.state.password2 ||
-    this.state.password1 === '' || this.state.netid === '';
+      this.state.password1 === '' || this.state.netid === '';
 
     return (
       <div id="signup">

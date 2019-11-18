@@ -4,7 +4,7 @@ import React, { Component } from "react";
 
 //Temporary semester and course data
 //TODO get real semester and course data from database in home
-const SEMESTER_DATA = [
+const DUMMY_SEMESTER_DATA = [
   ["Art101", "Cooking101"],
   ["The Art of Spaghetti"],
   ["Macaroni Art"],
@@ -20,13 +20,13 @@ class Plan extends Component {
   //Plan creates multiple Semester components
 
   render() {
-    //TODO update SEMESTER_DATA constant to be true data
+    //TODO update DUMMY_SEMESTER_DATA constant to be true data
     const { input } = this.props;
     const semesters = [];
-    for (let i = 0; i < SEMESTER_DATA.length; i++) {
+    for (let i = 0; i < DUMMY_SEMESTER_DATA.length; i++) {
       semesters.push(
         <Semester
-          course_data={SEMESTER_DATA[i]}
+          course_data={DUMMY_SEMESTER_DATA[i]}
           semester_number={i+1}
           key={i}
         />);

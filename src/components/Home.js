@@ -7,7 +7,8 @@ import React, { Component } from "react";
 
 //Temporary plan options for user to select from
 //TODO add logic to get options from backend (programs table)
-const options = [{value:'hello', label:'Hello'}, {value:'jpw', label:'jpw'}];
+//TODO add option to add new plan if logged in?
+const DUMMY_OPTIONS = [{value:'hello', label:'Hello'}, {value:'jpw', label:'jpw'}];
 
 class Home extends Component {
   /* Homepage of app where users enter plans they want to see
@@ -41,7 +42,7 @@ class Home extends Component {
               multi
               clearable
               create
-              options={options}
+              options={DUMMY_OPTIONS}
               values={this.state.selected}
               placeholder={"Select Plan(s)"}
               onChange={(values) => this.setState({selected:values})}
