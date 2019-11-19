@@ -1,6 +1,9 @@
 /*jshint esversion: 6 */
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
+import Select from 'react-dropdown-select';
+import ReactTooltip from 'react-tooltip';
+import Form from 'react-bootstrap/Form';
 import './stylesheets/Account.css';
 
 const DUMMY_ACCOUNT_INFO = {netid: "joe24", bio: "A pasta expert"};
@@ -12,6 +15,7 @@ const DUMMY_SEMESTERS = [
   { sem_num: "4", courses: [ {code: "PASTA305", name: "Linguini Painting", taken_for: "Culinary Arts B.A"}, {code: "PASTA255", name: "Tortellini Sculpting", taken_for: "Culinary Arts B.A"} ] },
   { sem_num: "5", courses: [ {code: "PASTA420", name: "Writing Orzo", taken_for: "Culinary Arts B.A"}, {code: "PASTA465", name: "Phtographing Capellini", taken_for: "Culinary Arts B.A"} ] },
 ];
+const DUMMY_TYPES = [{value: "B.A.", label: "B.A."}, {value: "B.S.", label: "B.S."}, {value: "Concentration", label: "Concentration"}, {value: "Ph.D.", label: "Ph.D."}, {value: "Minor", label: "Minor"}];
 
 class Account extends Component {
   constructor(props) {
@@ -25,8 +29,7 @@ class Account extends Component {
       newSemesters: [],
     };
     this.handleUpdate = this.handleUpdate.bind(this);
-    this.handleBioUpdate = this.handleBioUpdate.bind(this);
-    this.handleBioChange = this.handleBioChange.bind(this);
+    this.handleBioSubmit = this.handleBioSubmit.bind(this);
   }
 
   handleUpdate() {
@@ -35,22 +38,16 @@ class Account extends Component {
     console.log(this.state);
   }
 
-  handleBioUpdate(event) {
-    //Update information on page
-    //Send to state and then send updated info to backend
-    event.preventDefault();
-    if (
-      this.state.newAccountInfo.bio.length > 0 &&
-      this.state.newAccountInfo.bio !== this.state.accountInfo.bio
-    ) {
-        this.setState({accountInfo: this.state.newAccountInfo}, () => {
-          this.handleUpdate();
-        });
+  handleBioSubmit(e) {
+    //Send to state and then TODO: send updated info to backend
+    e.preventDefault();
+    if (e.target[0].value.length > 0) {
+      this.setState({accountInfo:
+        {netid: this.state.accountInfo.netid, bio: e.target[0].value}
+      }, () => {
+        this.handleUpdate(); //TODO: CHANGE TO DO UPDATING HERE
+      });
     }
-  }
-
-  handleBioChange(event) {
-    this.setState({newAccountInfo: {netid: this.state.accountInfo.netid, bio: event.target.value}});
   }
 
   handleProgramUpdate(event) {
@@ -77,38 +74,42 @@ class Account extends Component {
     });
   }
 
-  renderEmptyAccountInfo() {
-    return (
-      <div className="account_empty">
-        account empty
-      </div>
-    );
-  }
-
   renderAccountInfo() {
     const { accountInfo } = this.state;
+    console.log(accountInfo.bio)
+    const bioPlaceholder = 'Enter a brief bio or description about you and ' +
+      'your plans.\nEx. "Interested in data science/Norse literature/public ' +
+      'policy/etc."';
     return (
-      <div className="account_filled">
-        <div className = "account_user">
+      <div className="account_info">
+        <div className="account_user">
           <div className="account_netid">
-            Username: {accountInfo.netid}
+            Username: { accountInfo.netid }
           </div>
           <div className="account_email">
-            Email: {accountInfo.netid + "@duke.edu"}
+            Email: { accountInfo.netid + "@duke.edu" }
           </div>
         </div>
         <div className="account_bio">
-          <form onSubmit={this.handleBioUpdate}>
-            <label>
-              Bio:
-              <input
-                type="text"
-                placeholder={accountInfo.bio}
-                onChange={this.handleBioChange}
+          <Form onSubmit={this.handleBioSubmit} className="bio_form">
+            <Form.Group controlId="formBio" role="form">
+              <Form.Label>Description</Form.Label>
+              <div className="fas fa-question-circle" data-tip data-for="acc_bio" />
+              <ReactTooltip id="acc_bio" place="right" type="info" effect="float">
+                {"A brief bio or description about you and your plans."}
+                <br/>
+                {'Ex. "Interested in data science/Norse literature/public policy/etc."'}
+              </ReactTooltip>
+              <Form.Control
+                as="textarea"
+                defaultValue={ accountInfo.bio }
+                placeholder={ bioPlaceholder }
               />
-            </label>
-            <input type="submit" value="Update" />
-          </form>
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Update Description
+            </Button>
+          </Form>
         </div>
       </div>
     );
@@ -139,10 +140,14 @@ class Account extends Component {
             </label>
             <label>
               Type:
-              <input
-                type="text"
+              <Select
+                clearable
+                create
+                options={DUMMY_TYPES}
+                value={completed[i].type}
                 placeholder={completed[i].type}
-                onChange={this.handleProgTypeChange}
+                onChange={(value) => this.state.completed[i].type = value}
+                onCreateNew={(value) => this.state.completed[i].type = value}
               />
             </label>
             <Button
@@ -177,31 +182,6 @@ class Account extends Component {
       </div>
     );
   }
-
-  // renderCompleted() {
-  //   const { completed } = this.state;
-  //   const programs = [];
-  //   for (let i = 0; i < completed.length; i++) {
-  //     programs.push(
-  //       <div className="completed_program">
-  //         <div className="completed_name">
-  //
-  //
-  //
-  //
-  //           Program: {completed[i].name}
-  //         </div>
-  //         <div className="completed_type">
-  //           Type: {completed[i].type}
-  //         </div>
-  //       </div>);
-  //   }
-  //   return (
-  //     <div className="completed_filled">
-  //       {programs}
-  //     </div>
-  //   );
-  // }
 
   renderEmptySemesters() {
     return (
@@ -253,15 +233,11 @@ class Account extends Component {
   }
 
   render() {
-    const { completed, semesters, accountInfo } = this.state;
-    console.log(this.state);
+    const { completed, semesters } = this.state;
     return (
       <div className="page_container">
         <div className="account_container">
-          {accountInfo.bio.length === 0
-            ? this.renderEmptyAccountInfo()
-            : this.renderAccountInfo()
-          }
+          {this.renderAccountInfo()}
         </div>
         <div className="completed_container">
           {completed.length === 0
