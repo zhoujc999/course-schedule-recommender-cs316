@@ -1,12 +1,9 @@
 /*jshint esversion: 6 */
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
-// import Select from 'react-select';
-import Select from '@material-ui/core/Select';
+import Select from 'react-dropdown-select';
 import ReactTooltip from 'react-tooltip';
 import Form from 'react-bootstrap/Form';
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
 import './stylesheets/Account.css';
 
 const DUMMY_ACCOUNT_INFO = {netid: "joe24", bio: "A pasta expert"};
@@ -18,9 +15,8 @@ const DUMMY_SEMESTERS = [
   { sem_num: "4", courses: [ {code: "PASTA305", name: "Linguini Painting", taken_for: "Culinary Arts B.A"}, {code: "PASTA255", name: "Tortellini Sculpting", taken_for: "Culinary Arts B.A"} ] },
   { sem_num: "5", courses: [ {code: "PASTA420", name: "Writing Orzo", taken_for: "Culinary Arts B.A"}, {code: "PASTA465", name: "Phtographing Capellini", taken_for: "Culinary Arts B.A"} ] },
 ];
-// const DUMMY_TYPES = [{value: "B.A.", label: "B.A."}, {value: "B.S.", label: "B.S."}, {value: "Concentration", label: "Concentration"}, {value: "Ph.D.", label: "Ph.D."}, {value: "Minor", label: "Minor"}];
-const DUMMY_PROGRAMS = [{value: "Computer Science", label: "Computer Science"}, {value: "Psychology", label: "Psychology"}, {value: "Astrophysics", label: "Astrophysics"}, {value: "Culinary Arts", label: "Culinary Arts"}];
-const DUMMY_OPTIONS = DUMMY_PROGRAMS.map(val => (<MenuItem value={val.value}>{val.label}</MenuItem>));
+const DUMMY_TYPES = [{type: "B.A.", label: "B.A."}, {type: "B.S.", label: "B.S."}, {type: "Concentration", label: "Concentration"}, {type: "Ph.D.", label: "Ph.D."}, {type: "Minor", label: "Minor"}];
+const DUMMY_PROGRAMS = [{name: "Computer Science", label: "Computer Science"}, {name: "Psychology", label: "Psychology"}, {name: "Astrophysics", label: "Astrophysics"}, {name: "Culinary Arts", label: "Culinary Arts"}];
 
 class Account extends Component {
   constructor(props) {
@@ -29,60 +25,79 @@ class Account extends Component {
       accountInfo: {netid: "", bio: ""}, //User ID, email, bio -> Student DB
       completed: [], //Programs completed -> Completed + Program DB
       semesters: [], //Sems of classes completed -> Semester + Class DB
-      bioUpdated: false,
-      newCompleted: [],
+      bioUpdated: "INITIAL",
+      progUpdated: "INITIAL",
       newSemesters: [],
     };
-    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleBioUpdate = this.handleBioUpdate.bind(this);
     this.handleBioSubmit = this.handleBioSubmit.bind(this);
-    this.removeProgram = this.removeProgram.bind(this);
+    this.handleProgramUpdate = this.handleProgramUpdate.bind(this);
     this.handleProgramChange = this.handleProgramChange.bind(this);
-  }
-
-  handleUpdate() {
-    //TODO: Send updated info to backend
-    console.log('updating backend');
-    console.log(this.state);
-    this.setState({ bioUpdated: true });
+    this.handleTypeChange = this.handleTypeChange.bind(this);
   }
 
   handleBioSubmit(e) {
     //Send to state and then TODO: send updated info to backend
     e.preventDefault();
-    if (
-      e.target[0].value.length > 0 &&
-      e.target[0].value !== this.state.accountInfo.bio
-    ) {
+    if (e.target[0].value.length === 0) {
+      //blank
+      this.setState({ bioUpdated: "FAILED" });
+    } else if (e.target[0].value !== this.state.accountInfo.bio) {
+      //no change
+      this.setState({ bioUpdated: "INITIAL" });
+    } else {
+      //good change
       this.setState({ accountInfo:
         { netid: this.state.accountInfo.netid, bio: e.target[0].value }
       }, () => {
-        this.handleUpdate(); //TODO: CHANGE TO DO UPDATING HERE
+        this.handleBioUpdate(); //TODO: CHANGE TO DO UPDATING HERE
       });
     }
   }
 
-  handleProgramUpdate(event) {
-    //Update information on page
-    //Send to state and then send updated info to backend
-    event.preventDefault();
+  handleBioUpdate() {
+    //This function should be "final" confirmation of bio change
+    //TODO: Send updated info to backend
+    //TODO: Get rid of console logs
+    console.log('updating backend');
     console.log(this.state);
+    this.setState({ bioUpdated: "SUCCESS" });
   }
 
-  handleProgNameChange(event) {
-    console.log(event);
+  handleProgramChange = i => selectedValue => {
+    //Handles change in program name selection at index i
+    let completed = [...this.state.completed];
+    completed[i].name = selectedValue[0].name;
+    this.setState({ completed, progUpdated: "PENDING" });
   }
 
-  handleProgTypeChange(event) {
-    console.log(event);
+  handleTypeChange = i => selectedValue => {
+    //Handles change in program type selection at index i
+    let completed = [...this.state.completed];
+    completed[i].type = selectedValue[0].type;
+    this.setState({ completed, progUpdated: "PENDING" });
   }
 
-  componentDidMount() {
-    //TODO: Get existing data from database, if exists and put into state
-    this.setState({
-      accountInfo: DUMMY_ACCOUNT_INFO,
-      completed: DUMMY_COMPLETED,
-      semesters: DUMMY_SEMESTERS,
-    });
+  handleProgramUpdate() {
+    //This function should be "final" confirmation of program change
+    //TODO: Send updated info to backend
+    //Check to make sure nothing is empty
+    //TODO: Get rid of console logs
+    console.log('updating backend');
+    console.log(this.state);
+
+    const { completed } = this.state;
+    let canUpdate = true;
+    for (let i = 0; i < completed.length; i++) {
+      if (completed[i].name === "" || completed[i].type === "") {
+        canUpdate = false;
+      }
+    }
+    if (canUpdate === true) {
+      this.setState({ progUpdated: "SUCCESS" }); //TODO: UPDATE BACKEND/DB
+    } else {
+      this.setState({ progUpdated: "FAILED" });
+    }
   }
 
   renderAccountInfo() {
@@ -105,31 +120,53 @@ class Account extends Component {
         <div className="account_bio">
           <Form onSubmit={ this.handleBioSubmit }>
             <Form.Group controlId="formBio" role="form">
-              <Form.Label className="bio_form_label">
-                Description
-              </Form.Label>
-              <div className="fas fa-question-circle" data-tip data-for="acc_bio" />
-              <ReactTooltip id="acc_bio" place="right" type="info" effect="float">
-                {"A brief bio or description about you and your plans."}
-                <br/>
-                {'Ex. "Interested in data science/Norse literature/public policy/etc."'}
-              </ReactTooltip>
+              <div className="bio_top">
+                <Form.Label className="bio_form_label">
+                  Description:
+                </Form.Label>
+                <i
+                  className="fas fa-question-circle"
+                  data-tip data-for="acc_bio"
+                  style={{color: "#17a2b8", padding: "8px 4px 0px 0px"}}
+                />
+                <ReactTooltip
+                  id="acc_bio"
+                  place="right"
+                  type="info"
+                  effect="float"
+                >
+                  {"A brief bio or description about you and your plans."}
+                  <br/>
+                  {'Ex. "Interested in data science/literature/public ' +
+                    'policy/etc."'
+                  }
+                </ReactTooltip>
+                {
+                  bioUpdated === "FAILED" &&
+                  this.renderWarningIcon("Don't leave your bio blank!")
+                }
+              </div>
               <Form.Control
                 as="textarea"
                 defaultValue={ accountInfo.bio }
                 placeholder={ bioPlaceholder }
-                onChange={ () => this.setState({ bioUpdated: false }) }
+                onChange={ () => this.setState({ bioUpdated: "PENDING" }) }
               />
             </Form.Group>
             <Button
               variant="primary"
               type="submit"
-              disabled={ bioUpdated }
+              disabled={ bioUpdated === "SUCCESS" || bioUpdated === "INITIAL" }
             >
               Update Description
             </Button>
-            {bioUpdated === true && (
+            {bioUpdated === "SUCCESS" && (
               <span className="success_text">Successfully Updated!</span>
+            )}
+            {bioUpdated === "FAILED" && (
+              <span className="failed_text">
+                Something went wrong... Please check error icons and try again
+              </span>
             )}
           </Form>
         </div>
@@ -139,6 +176,7 @@ class Account extends Component {
   }
 
   renderEmptyCompleted() {
+    //Render Plan Info when completed plans is empty
     const { completed } = this.state;
     return (
       <div>
@@ -152,7 +190,12 @@ class Account extends Component {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => this.setState({completed: [...completed, {name: "", type:""}]})}
+              onClick={() =>
+                this.setState({
+                  completed: [...completed, {name: "", type:""}],
+                  progUpdated: "PENDING"
+                })
+              }
             >
               Add Program
             </Button>
@@ -163,148 +206,161 @@ class Account extends Component {
     );
   }
 
-  removeProgram(i) {
-    // const completed = this.state.completed;
-    // completed.splice(i, 1);
-    // this.setState({ completed });
-
-    this.setState((prevState) => ({
-      completed: [...prevState.completed.slice(0,i), ...prevState.completed.slice(i+1)]
-    }))
-  }
-
-  handleProgramChange = i => event => {
-    let completed = [...this.state.completed];
-    completed[i].name = event.target.value;
-    this.setState({ completed });
-  }
-
   renderCompleted() {
-    const { completed } = this.state;
-    console.log('HERE');
-    console.log(DUMMY_OPTIONS)
-    console.log(completed)
+    //Render Plan Info with at least one program
+    //TODO: replace DUMMY_PROGRAMS and DUMMY_TYPES with real data
+    const { completed, progUpdated } = this.state;
+    const programPlaceholder = "ex. Psychology/Statistics/etc.";
+    const typePlaceholder = "ex. B.S./Minor/etc.";
     const programs = this.state.completed.map((prog, i) => (
-        <div key={i}>
-          <div className="label">Program</div>
-            <FormControl>
+        <div className="program" key={i}>
+          <div className="program_label">Program:</div>
+          <i
+            className="fas fa-question-circle"
+            data-tip data-for="prog_name"
+            style={{color: "#17a2b8", padding: "8px 4px 0px 0px"}}
+          />
+          <ReactTooltip
+            id="prog_name"
+            place="right"
+            type="info"
+            effect="float"
+          >
+            {"The name of your academic program/path/area of study."}
+            <br/>
+            {'If you do not see your program listed, type it in and add it'}
+          </ReactTooltip>
+          {
+            prog.name === "" &&
+            this.renderWarningIcon("Please complete this field")
+          }
+          <div className="program_select">
             <Select
-              autowidth
-              value={prog.name}
-              onChange={this.handleProgramChange(i)}
-            >
-              <MenuItem value="" disabled>
-                {"ex. Psychology/Statistics/etc."}
-              </MenuItem>
-              {DUMMY_OPTIONS}
-            </Select>
-            </FormControl>
+              searchable
+              create
+              labelField={"name"} //field of object
+              valueField={"name"} //change field to key in real data
+              searchBy={"name"}
+              placeholder={ programPlaceholder }
+              addPlaceholder={ prog.name === "" && programPlaceholder }
+              onChange={ this.handleProgramChange(i) }
+              values={
+                [prog.name !== "" &&
+                DUMMY_PROGRAMS.find(val => val.name === prog.name)]
+              }
+              options={ DUMMY_PROGRAMS }
+            />
+          </div>
+          <div className="type_label">Type:</div>
+          <i
+            className="fas fa-question-circle"
+            data-tip data-for="prog_type"
+            style={{color: "#17a2b8", padding: "8px 4px 0px 0px"}}
+          />
+          <ReactTooltip
+            id="prog_type"
+            place="right"
+            type="info"
+            effect="float"
+          >
+            {"The type of program you are in (B.S./Minor/Concentration/etc.)."}
+            <br/>
+            {'If you do not see your program type listed, type it in and add it'}
+          </ReactTooltip>
+          {
+            prog.type === "" &&
+            this.renderWarningIcon("Please complete this field")
+          }
+          <div className="type_select">
+            <Select
+              searchable
+              create
+              labelField={"type"} //field of object
+              valueField={"type"} //change field to key in real data
+              searchBy={"type"}
+              placeholder={ typePlaceholder }
+              addPlaceholder={ prog.type === "" && typePlaceholder }
+              onChange={ this.handleTypeChange(i) }
+              values={
+                [prog.type !== "" &&
+                DUMMY_TYPES.find(val => val.type === prog.type)]
+              }
+              options={ DUMMY_TYPES }
+            />
+          </div>
         </div>
       )
     );
-
-
-
-    // <Select
-    //   isClearable
-    //   value={{value: prog.name, label: prog.name}}
-    //   onChange={ this.handleProgramChange(i) }
-    //   onCreateNew={ this.handleProgramChange(i) }
-    //   placeholder={ "ex. Psychology/Statistics/etc." }
-    //   options={ DUMMY_PROGRAMS }
-    // />
-        // <div>
-        //   <Form>
-        //     <Form.Group controlId="formProg" role="form">
-        //       <Form.Label className="program_label">Program</Form.Label>
-        //       <Form.Control
-        //         as="input"
-        //         value={ completed[i].name }
-        //         placeholder={ "ex. Psychology/Statistics/etc." }
-        //         onChange={e => this.handleProgramChange(i, e)}
-        //       />
-        //     </Form.Group>
-        //     <Button
-        //       variant="secondary"
-        //       size="sm"
-        //       onClick={() => this.removeProgram(i)}
-        //     >
-        //       Remove
-        //     </Button>
-        //   </Form>
-        // </div>
-      // )
-    // }
-    // for (let i = 0; i < completed.length; i++) {
-    //   programs.push(
-    //     <div>
-    //       <form>
-    //         <label>
-    //           Program:
-    //           <input
-    //             type="text"
-    //             placeholder={completed[i].name}
-    //             onChange={this.handleProgNameChange}
-    //           />
-    //         </label>
-    //         <label>
-    //           Type:
-    //           <Select
-    //             clearable
-    //             create
-    //             options={DUMMY_TYPES}
-    //             value={completed[i].type}
-    //             placeholder={completed[i].type}
-    //             onChange={(value) => this.state.completed[i].type = value}
-    //             onCreateNew={(value) => this.state.completed[i].type = value}
-    //           />
-    //         </label>
-            // <Button
-            //   variant="secondary"
-            //   size="sm"
-            //   onClick={() =>
-            //     this.setState({completed: this.state.completed.filter((v, ind) => ind !== i)})
-            //   }
-            // >
-    //           Remove
-    //         </Button>
-    //       </form>
-    //     </div>);
-    // }
     return (
-      <div className="completed_filled">
+      <div>
         <span className="completed_header">Plan Info</span>
         <hr className="hrstyle_main" />
         {programs}
-        <div className="completed_add_button">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => this.setState({completed: [...completed, {name: "", type:""}]})}
-          >
-            Add Program
-          </Button>
-        </div>
-        <div className="completed_remove_button">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => this.setState({completed: [...completed.slice(0,-1)]})}
-          >
-            Remove
-          </Button>
+        <div className="completed_buttons">
+          <div className="completed_add_button">
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={this.state.completed.length >= 5}
+              onClick={() =>
+                this.setState({
+                  completed: [...completed, {name: "", type:""}],
+                  progUpdated: "PENDING"
+                })
+              }
+            >
+              Add Program
+            </Button>
+          </div>
+          <div className="completed_remove_button">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() =>
+                this.setState({
+                  completed: [...completed.slice(0,-1)],
+                  progUpdated: "PENDING"
+                })
+              }
+            >
+              Remove Program
+            </Button>
+          </div>
         </div>
         <Button
           variant="primary"
           size="sm"
           onClick={this.handleProgramUpdate}
+          disabled={ progUpdated === "SUCCESS" || progUpdated === "INITIAL" }
         >
           Update
         </Button>
+        {progUpdated === "SUCCESS" && (
+          <span className="success_text">Successfully Updated!</span>
+        )}
+        {progUpdated === "FAILED" && (
+          <span className="failed_text">
+            Something went wrong... Please check error icons and try again
+          </span>
+        )}
         <hr className="hrstyle_separator" />
       </div>
     );
   }
+
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+
 
   renderEmptySemesters() {
     return (
@@ -353,6 +409,53 @@ class Account extends Component {
         {sems}
       </div>
     );
+  }
+
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+  /*********************************************************************************/
+
+
+  renderWarningIcon(message) {
+    //Render warning icon with tooltip containing message passed in to it
+    return (
+      <div>
+        <i
+          className="fas fa-exclamation-circle"
+          style={{color: "#dc3545b8", paddingTop: "8px"}}
+          data-tip data-for="warning_icon"
+        />
+        <ReactTooltip
+          id="warning_icon"
+          place="right"
+          type="error"
+          effect="float"
+        >
+          {message}
+        </ReactTooltip>
+      </div>
+    );
+  }
+
+  componentDidMount() {
+    //TODO: Get existing data from database, if exists and put into state
+    this.setState({
+      accountInfo: DUMMY_ACCOUNT_INFO,
+      completed: DUMMY_COMPLETED,
+      semesters: DUMMY_SEMESTERS,
+    });
   }
 
   render() {

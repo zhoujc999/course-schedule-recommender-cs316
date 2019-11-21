@@ -26,7 +26,12 @@
 }
 
 .account_bio {
-  padding: 20px 0px 0px 0px;
+  padding: 18px 0px 0px 0px;
+}
+
+.bio_top {
+  display: flex;
+  flex-direction: row;
 }
 
 .bio_form_label {
@@ -35,6 +40,12 @@
 
 .success_text {
   color: green;
+  padding-left: 15px;
+  font-size: 20px;
+}
+
+.failed_text {
+  color: red;
   padding-left: 15px;
   font-size: 20px;
 }
@@ -56,6 +67,26 @@
   justify-content: left;
 }
 
+.program {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 5px;
+}
+
+.program_label {
+  padding-right: 10px;
+  padding-top: 2px;
+}
+
+.type_label {
+  padding-right: 10px;
+  padding-top: 2px;
+}
+
+.program_select {
+  padding-right: 10px;
+}
+
 .no_plan_text {
   padding-bottom: 10px;
 }
@@ -63,6 +94,16 @@
 .completed_program {
   display: flex;
   flex-direction: row;
+}
+
+.completed_buttons {
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+}
+
+.completed_add_button {
+  padding-right: 20px;
 }
 
 .completed_name {
