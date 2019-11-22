@@ -115,8 +115,45 @@
 }
 
 .semester_container {
-  background-color: purple;
-  margin: 10px;
+  color: #00334e;
+  margin: 0px 10px;
+  font-size: 22px;
+}
+
+.semester_header {
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.sems_empty_main {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.sems_add_button {
+  padding-right: 20px;
+}
+
+.semester_buttons {
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+}
+
+.no_sem_text {
+  padding-bottom: 10px;
+}
+
+.course_top_row {
+  display: flex;
+  flex-direction: row;
+}
+
+.indiv_course {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
 }
 
 .hrstyle_main {
