@@ -33,6 +33,7 @@ urlpatterns = [
     path('', RecommenderViews.index, name='index'),
     path('login', RecommenderViews.index, name='index'),
     path('signup', RecommenderViews.index, name='index'),
+    path('account', RecommenderViews.index, name='index'),
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
 ]
