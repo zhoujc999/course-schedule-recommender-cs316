@@ -48,7 +48,7 @@ class Account extends Component {
     if (e.target[0].value.length === 0) {
       //blank
       this.setState({ bioUpdated: "FAILED" });
-    } else if (e.target[0].value !== this.state.accountInfo.bio) {
+    } else if (e.target[0].value === this.state.accountInfo.bio) {
       //no change
       this.setState({ bioUpdated: "INITIAL" });
     } else {
