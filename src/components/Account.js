@@ -477,18 +477,18 @@ class Account extends Component {
           <span className="course_form_label">Code: </span>
           <i
             className="fas fa-question-circle"
-            data-tip data-for="course_tooltip"
+            data-tip data-for="course_code_tooltip"
             style={{color: "#17a2b8", padding: "12px 4px 0px 0px"}}
           />
           <ReactTooltip
-            id="course_tooltip"
+            id="course_code_tooltip"
             place="right"
             type="info"
             effect="float"
           >
             {"The code associated with your course (ex. AMI215)"}
             <br/>
-            {'If you do not see your course listed, type it in and add it'}
+            {'If you do not see your course code listed, type it in and add it'}
           </ReactTooltip>
           {
             course.code === "" &&
@@ -514,18 +514,18 @@ class Account extends Component {
           <span className="course_form_label">Name: </span>
           <i
             className="fas fa-question-circle"
-            data-tip data-for="course_tooltip"
+            data-tip data-for="course_name_tooltip"
             style={{color: "#17a2b8", padding: "12px 4px 0px 0px"}}
           />
           <ReactTooltip
-            id="course_tooltip"
+            id="course_name_tooltip"
             place="right"
             type="info"
             effect="float"
           >
-            {"The code associated with your course (ex. AMI215)"}
+            {"The name associated with your course (ex. Animated Film)"}
             <br/>
-            {'If you do not see your course listed, type it in and add it'}
+            {'If you do not see your course name listed, type it in and add it'}
           </ReactTooltip>
           {
             course.name === "" &&
@@ -551,18 +551,16 @@ class Account extends Component {
           <span className="course_form_label">Taken For: </span>
           <i
             className="fas fa-question-circle"
-            data-tip data-for="course_tooltip"
+            data-tip data-for="course_purpose_tooltip"
             style={{color: "#17a2b8", padding: "12px 4px 0px 0px"}}
           />
           <ReactTooltip
-            id="course_tooltip"
+            id="course_purpose_tooltip"
             place="right"
             type="info"
             effect="float"
           >
-            {"The code associated with your course (ex. AMI215)"}
-            <br/>
-            {'If you do not see your course listed, type it in and add it'}
+            {"Why you took this course/for what requirement"}
           </ReactTooltip>
           {
             course.taken_for === "" &&
@@ -621,7 +619,7 @@ class Account extends Component {
     const { semesters, semsUpdated } = this.state;
     const sems = this.state.semesters.map((sem, i) => (
         <div className="indiv_semester" key={i}>
-          <div className="semester_label">Semester: {sem.sem_num}</div>
+          <div className="semester_label">Semester {sem.sem_num}</div>
           <div className="courses">
             {sem.courses.length > 0
               ? this.makeCourses(sem)
