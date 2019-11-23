@@ -131,6 +131,11 @@
   justify-content: left;
 }
 
+.empty_course_top {
+  display: flex;
+  flex-direction: row;
+}
+
 .sems_add_button {
   padding-right: 20px;
 }
@@ -154,12 +159,51 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 10px;
+  font-size: 14px;
+  padding-left: 25px;
+}
+
+.course_forms {
+  display: flex;
+  flex-direction: row;
+}
+
+.course_label {
+  font-size: 18px;
+}
+
+.semester_label {
+  padding-bottom: 8px;
+}
+
+.course_form_label {
+  padding: 8px 4px 0px 0px;
+}
+
+.course_form {
+  padding-right: 8px;
+}
+
+.course_buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.course_add_button {
+  padding-right: 15px;
 }
 
 .hrstyle_main {
 	border-top: 3px double #00334e;
   height: 2px;
   font-weight: 400;
+}
+
+.hrstyle_semester {
+  border: 0;
+  height: 1px;
+  background: #333;
+  background-image: linear-gradient(to right, #ccc, #00334e, #ccc);
 }
 
 .hrstyle_separator {
