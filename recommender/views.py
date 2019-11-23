@@ -2,8 +2,6 @@ from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView
 
 
-from django.contrib.auth.models import User
-
 from recommender.models import Program,     \
                                Class,       \
                                Student,     \

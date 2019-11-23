@@ -30,6 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,10 +45,10 @@ INSTALLED_APPS = [
     # Our App
     'students',
     'recommender',
+    'backend_auth',
 
     # 3rd party apps
     'rest_framework',
-    'rest_framework.authtoken',
 ]
 
 AUTH_USER_MODEL = 'students.User'
@@ -128,8 +129,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
+	'rest_framework.authentication.SessionAuthentication',
+	'rest_framework.authentication.BasicAuthentication',
+	'backend.authentication.FirebaseAuthentication',
+	),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
