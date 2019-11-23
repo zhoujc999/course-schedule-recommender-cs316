@@ -46,7 +46,6 @@ class Login extends Component {
           isLoggedIn: true,
           error: null
         });
-
         // TODO: change redirect URL after successful login
         if (this.state.isLoggedIn) {
           this.props.history.push('/account');
@@ -108,6 +107,7 @@ class Login extends Component {
     );
   }
 }
+
 
 const SignupLink = () => (
   <p id="signup-link">
