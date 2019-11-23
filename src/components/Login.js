@@ -26,16 +26,15 @@ class Login extends Component {
       error: null
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSignup = this.handleSignup.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   handleChange(event) {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  handleSignup(event) {
+  handleLogin(event) {
     const email = this.state.netid + "@duke.edu";
-
     this.props.firebase
       .doSignInWithEmailAndPassword(email, this.state.password)
       //reset the state after successful user registration
@@ -95,7 +94,7 @@ class Login extends Component {
             className="form-elem-top"
             type="submit"
             disabled={isInvalid}
-            onClick={(event)=>this.handleSignup(event)}
+            onClick={(event)=>this.handleLogin(event)}
             variant="outline-info"
           >
             Log In
