@@ -42,6 +42,14 @@ class Signup extends Component {
         });
       // TODO: change redirect URL after successful signup
         if (this.state.isAuthed) {
+          this.props.firebase.doRetrieveToken()
+          .then((idToken) => {
+            console.log(idToken);
+          })
+          .catch(err => {
+            this.setState({error: err});
+          });
+
           this.props.history.push("/account");
         }
       })

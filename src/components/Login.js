@@ -47,6 +47,14 @@ class Login extends Component {
         });
         // TODO: change redirect URL after successful login
         if (this.state.isLoggedIn) {
+          this.props.firebase.doRetrieveToken()
+          .then((idToken) => {
+            console.log(idToken);
+          })
+          .catch(err => {
+            this.setState({error: err});
+          });
+          
           this.props.history.push('/account');
         }
       })
