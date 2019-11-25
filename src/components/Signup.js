@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { withFirebase } from './firebase';
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
@@ -19,6 +20,7 @@ class Signup extends Component {
       error: null
     };
     this.handleChange = this.handleChange.bind(this);
+    this.verifyNetId = this.verifyNetId.bind(this);
     this.handleSignup = this.handleSignup.bind(this);
   }
 
@@ -26,8 +28,34 @@ class Signup extends Component {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  handleSignup(event) {
-    const email = this.state.netid + "@duke.edu";
+  verifyNetId(event) {
+    const netid = this.state.netid;
+
+    const url = 'https://api.colab.duke.edu/identity/v1/' + netid;
+    const key = {
+      headers: {
+        'x-api-key': 'course-schedule-recommender'
+      }
+    };
+
+    axios.get(url, key)
+    //valid netid - create new user and go to account page
+    .then(res => {
+      this.handleSignup(netid);
+    })
+    //invalid netid - set error message
+    .catch(err => {
+      const error = {
+        message: 'Invalid NetID'
+      }
+      this.setState({error: error});
+    });
+
+    event.preventDefault();
+  }
+
+  handleSignup(netid) {
+    const email = netid + "@duke.edu";
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, this.state.password1)
@@ -56,8 +84,6 @@ class Signup extends Component {
       .catch(err => {
         this.setState({error: err});
       });
-
-      event.preventDefault();
   }
 
   render() {
@@ -109,7 +135,7 @@ class Signup extends Component {
             className = "form-elem"
             type="submit"
             disabled={isInvalid}
-            onClick={(event)=>this.handleSignup(event)}
+            onClick={(event)=>this.verifyNetId(event)}
             variant="outline-info"
           >
             Sign Up
