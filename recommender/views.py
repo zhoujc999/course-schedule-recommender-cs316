@@ -25,11 +25,11 @@ index = never_cache(TemplateView.as_view(template_name='index.html'))
 class ProgramView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = ProgramSerializer
-    def get_queryset(self):
-        user = self.request.user
-        queryset = WagePosting.objects.filter(uid=user)
-        return queryset
-    #  queryset = Program.objects.all()
+    #  def get_queryset(self):
+        #  user = self.request.user
+        #  queryset = Program.objects.filter(uid=user)
+        #  return queryset
+    queryset = Program.objects.all()
 
 class ClassView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)

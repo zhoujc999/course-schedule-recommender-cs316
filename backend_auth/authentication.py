@@ -17,7 +17,7 @@ class BaseFirebaseAuthentication(authentication.BaseAuthentication):
     check_revoked = False
 
     def authenticate(self, request):
-        print(pretty_request(request))
+        #  print(pretty_request(request))
         auth = authentication.get_authorization_header(request).split()
 
         if not auth or auth[0].lower() != self.keyword.lower().encode():
@@ -45,17 +45,17 @@ class BaseFirebaseAuthentication(authentication.BaseAuthentication):
                 app=self.get_firebase_app(),
                 check_revoked=self.check_revoked,
             )
-        except (ValueError, firebase_exceptions.InvalidIdTokenError):
+        except (ValueError, firebase_auth.InvalidIdTokenError):
             # Token was either not a string or empty or not an valid Firebase ID token
             msg = _('The Firebase token was invalid.')
             raise AuthenticationFailed(msg)
-        except firebase_exceptions.ExpiredIdTokenError:
+        except firebase_auth.ExpiredIdTokenError:
             msg = _('The Firebase token has expired.')
             raise AuthenticationFailed(msg)
-        except firebase_exceptions.RevokedIdTokenError:
+        except firebase_auth.RevokedIdTokenError:
             msg = _('The Firebase token has been revoked.')
             raise AuthenticationFailed(msg)
-        except firebase_exceptions.CertificateFetchError:
+        except firebase_auth.CertificateFetchError:
             msg = _('Temporarily unable to verify the ID token.')
             raise AuthenticationFailed(msg)
 
