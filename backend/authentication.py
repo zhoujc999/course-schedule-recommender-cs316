@@ -22,12 +22,14 @@ class FirebaseAuthentication(BaseFirebaseAuthentication):
     def get_django_user(self, firebase_user_record):
         user_email = firebase_user_record.email
         user_netid = FirebaseAuthenticationHelper.before(user_email, "@duke.edu")
-        student_user=Student.objects.get_or_create(
-            netid=user_netid
-        )
+        #  student_user=Student.objects.get_or_create(
+            #  netid=user_netid
+        #  )
         return get_user_model().objects.get_or_create(
             firebase_uid=firebase_user_record.uid,
-            #  student.netid=student_user.netid
+            username=user_netid,
+            email=user_email,
+            duke_netid=user_netid
         )[0]
 
 

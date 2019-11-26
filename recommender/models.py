@@ -27,8 +27,6 @@ class Program(models.Model):
 
 class Student(models.Model):
     netid = models.CharField(primary_key=True, max_length=8)
-    #  user = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                #  on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=512, blank=True, null=True)
 
     class Meta:

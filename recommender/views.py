@@ -13,6 +13,8 @@ from recommender.serializers import ProgramSerializer,     \
                                     SemesterSerializer,    \
                                     CompletedSerializer
 
+from recommender.permissions import ReadPermission
+
 from rest_framework import views, viewsets
 from rest_framework import generics
 from rest_framework import filters
@@ -23,7 +25,7 @@ from rest_framework.permissions import IsAuthenticated
 index = never_cache(TemplateView.as_view(template_name='index.html'))
 
 class ProgramView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (ReadPermission,)
     serializer_class = ProgramSerializer
     #  def get_queryset(self):
         #  user = self.request.user
@@ -32,21 +34,21 @@ class ProgramView(viewsets.ModelViewSet):
     queryset = Program.objects.all()
 
 class ClassView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (ReadPermission,)
     serializer_class = ClassSerializer
     queryset = Class.objects.all()
 
 class StudentView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (ReadPermission,)
     serializer_class = StudentSerializer
     queryset = Student.objects.all()
 
 class SemesterView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (ReadPermission,)
     serializer_class = SemesterSerializer
     queryset = Semester.objects.all()
 
 class CompletedView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (ReadPermission,)
     serializer_class = CompletedSerializer
     queryset = Completed.objects.all()

@@ -134,7 +134,7 @@ REST_FRAMEWORK = {
 	'backend.authentication.FirebaseAuthentication',
 	),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'recommender.permissions.ReadPermission',
     ),
 }
 
