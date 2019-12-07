@@ -12,7 +12,7 @@ import axios from 'axios';
 //TODO add option to add new plan if logged in?
 
 const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
-const getPrograms = () => {
+const getPrograms = function() {
   return axios.get(programUrl);
 };
 
@@ -46,26 +46,34 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      options: [],
       selected: [],
       plans: [],
       querySubmitted: false,
       error: null
     };
-    this.options = this.setOptions();
+    this.setOptions = this.setOptions.bind(this);
     this.handleSearchPlans = this.handleSearchPlans.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({options: this.setOptions()});
   }
 
   setOptions() {
     const OPTIONS = [];
     getPrograms()
-    .then(res => {
+    .then(res => res.json()).then(res => {
+      console.log(res);
       const programs = JSON.parse(res);
+      console.log(programs);
       for (let i = 0; i < programs.length; i++) {
         const program = {
           value: programs[i].name,
           label: programs[i].name
         };
         OPTIONS.push(program);
+        console.log(program.label);
       }
     })
     .catch(err => {
