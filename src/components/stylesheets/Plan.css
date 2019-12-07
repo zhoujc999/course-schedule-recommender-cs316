@@ -1,10 +1,26 @@
 .plan {
-  background-color: blue;
+  background-color: #2b4d65b8;
   margin: 20px 0px;
   padding: 5px;
+  border-radius: 15px;
 }
 
 .plan_text {
   font-size: 24px;
   color: #00334e;
+}
+
+.plan_programs {
+  display: flex;
+  flex-direction: row;
+}
+
+.program {
+  padding-right: 30px;
+}
+
+.plan_user_descr {
+  padding-left: 15px;
+  padding-top: 10px;
+  font-size: 16px;
 }

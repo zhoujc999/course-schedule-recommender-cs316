@@ -9,21 +9,23 @@ class Semester extends Component {
   //Semester creates multiple Course components
 
   render() {
-    const {sem_data} = this.props;
+    const { sem_data, ...other } = this.props;
     const courses = [];
     for (let i = 0; i < sem_data.courses.length; i++) {
       courses.push(
         <Course
           course_data={sem_data.courses[i]}
+          c_key={i}
           key={i}
+          {...other}
         />);
     }
     return (
-      <div>
+      <div className="sem_container">
         <div className="semester_text">
           {"Semester "+sem_data.sem_num}
         </div>
-        <div className="semester">
+        <div className="semester_courses">
           {courses}
         </div>
       </div>
