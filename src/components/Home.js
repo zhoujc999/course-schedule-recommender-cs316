@@ -52,7 +52,10 @@ class Home extends Component {
 
   componentDidMount() {
     console.log('1');
-    this.setState({options: this.setOptions()});
+    this.setOptions().then(res => {
+      console.log(res)
+      this.setState({options: res});
+    })
   }
 
   setOptions() {
@@ -63,14 +66,14 @@ class Home extends Component {
     console.log('4')
     return axios.get(programUrl)
     .then(res => {
+    //   console.log('5')
+    //   console.log(res)
+    //   return res.json();
+    // }).then(res => {
+    //   console.log('6')
+    //   console.log(res);
+      const programs = res.data;
       console.log('5')
-      console.log(res)
-      return res.json();
-    }).then(res => {
-      console.log('6')
-      console.log(res);
-      const programs = JSON.parse(res);
-      console.log('7')
       console.log(programs);
       for (let i = 0; i < programs.length; i++) {
         const program = {
@@ -78,7 +81,7 @@ class Home extends Component {
           label: programs[i].name
         };
         OPTIONS.push(program);
-        console.log(program.label);
+        // console.log(program.label);
       }
       return OPTIONS;
     })
