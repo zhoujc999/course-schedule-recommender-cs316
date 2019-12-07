@@ -184,6 +184,11 @@
   padding-right: 8px;
 }
 
+.course_form_name {
+  padding-top: 8px;
+  padding-right: 16px;
+}
+
 .course_buttons {
   display: flex;
   flex-direction: row;
@@ -214,5 +219,11 @@
   color: #00334e;
   text-align: center;
   padding-bottom: 5px;
+}
 
+.vl {
+  border-left: 2px solid #00334e;
+  height: 20px;
+  margin-top: 8px;
+  padding: 0px 8px;
 }

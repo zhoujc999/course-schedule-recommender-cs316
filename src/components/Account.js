@@ -464,7 +464,6 @@ class Account extends Component {
   makeCourses(semester) {
     //Creates Course Forms for each semester
     const courseCodePlaceholder = "ex. AMI215/MATH212/etc.";
-    const courseNamePlaceholder = "ex. Animated Film/Soccer Politics/etc.";
     const coursePurposePlaceholder = "ex. Program/T-Req/Fun/etc.";
     const taken_options = [
       ...new Set(this.state.completed.map(prog => prog.name + " " + prog.type))
@@ -497,7 +496,6 @@ class Account extends Component {
           <div className="course_form">
             <Select
               searchable
-              create
               labelField={"code"} //field of object
               valueField={"code"} //change field to key in real data
               searchBy={"code"}
@@ -511,43 +509,15 @@ class Account extends Component {
               options={ DUMMY_COURSES }
             />
           </div>
+          <span className="vl" />
           <span className="course_form_label">Name: </span>
-          <i
-            className="fas fa-question-circle"
-            data-tip data-for="course_name_tooltip"
-            style={{color: "#17a2b8", padding: "12px 4px 0px 0px"}}
-          />
-          <ReactTooltip
-            id="course_name_tooltip"
-            place="right"
-            type="info"
-            effect="float"
-          >
-            {"The name associated with your course (ex. Animated Film)"}
-            <br/>
-            {'If you do not see your course name listed, type it in and add it'}
-          </ReactTooltip>
-          {
-            course.name === "" &&
-            this.renderWarningIcon("Please complete this field", "12px")
-          }
-          <div className="course_form">
-            <Select
-              searchable
-              create
-              labelField={"name"} //field of object
-              valueField={"name"} //change field to key in real data
-              searchBy={"name"}
-              placeholder={ courseNamePlaceholder }
-              addPlaceholder={ course.name === "" && courseNamePlaceholder }
-              onChange={ this.handleCourseChange(i, semester.sem_num, "name") }
-              values={
-                [course.name !== "" &&
-                DUMMY_COURSES.find(val => val.name === course.name)]
-              }
-              options={ DUMMY_COURSES }
-            />
+          <div className="course_form_name">
+            {DUMMY_COURSES.find(val => val.code === course.code) !== undefined
+              ? DUMMY_COURSES.find(val => val.code === course.code).name
+              : ""
+            }
           </div>
+          <span className="vl" />
           <span className="course_form_label">Taken For: </span>
           <i
             className="fas fa-question-circle"
