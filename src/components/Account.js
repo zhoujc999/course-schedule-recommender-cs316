@@ -5,6 +5,7 @@ import Select from 'react-dropdown-select';
 import ReactTooltip from 'react-tooltip';
 import Form from 'react-bootstrap/Form';
 import './stylesheets/Account.css';
+import axios from 'axios';
 
 const DUMMY_ACCOUNT_INFO = {netid: "joe24", bio: "A pasta expert"};
 const DUMMY_COMPLETED = [{name: "Culinary Arts", type: "B.A."}, {name: "Astrophysics", type: "Ph.D."}];
