@@ -24,6 +24,9 @@ class NavRouter extends Component {
               <Nav.Link className="link" href="/"><i className="fas fa-home"></i> Home</Nav.Link>
             </Nav.Item>
             <Nav.Item as="li">
+              <Nav.Link className="link" href="/account"><i className="fas fa-user-circle"></i> Account</Nav.Link>
+            </Nav.Item>
+            <Nav.Item as="li">
               <Nav.Link className="link" href="/login"><i className="fas fa-sign-in-alt"></i> Log In</Nav.Link>
             </Nav.Item>
             <Nav.Item as="li">
