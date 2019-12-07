@@ -13,14 +13,21 @@ class Plan extends Component {
   //Plan creates multiple Semester components
 
   renderPlanInfo(planInfo) {
-    const programs = planInfo.programs.map(p => `${p.name} ${p.type}`);
+    const programs = planInfo.programs.map(p => `${p.name} ${p.type}`).map(ps => (
+      <span className="program">
+        {ps}
+      </span>
+    ))
     return (
       <div className="plan_text">
         <div className="plan_programs">
           {programs}
         </div>
         <div className="plan_user">
-          {planInfo.user}
+          {`User: ${planInfo.user}`}
+        </div>
+        <div className="plan_user_descr">
+          {`Description: ${planInfo.description}`}
         </div>
       </div>
     );
@@ -28,13 +35,15 @@ class Plan extends Component {
 
   render() {
     //TODO update DUMMY_SEMESTER_DATA constant to be true data
-    const { input } = this.props;
+    const { input, ...other } = this.props;
     const semesters = [];
     for (let i = 0; i < input.semesters.length; i++) {
       semesters.push(
         <Semester
           sem_data={input.semesters[i]}
+          s_key={i}
           key={i}
+          {...other}
         />);
     }
     return (

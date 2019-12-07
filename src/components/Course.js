@@ -1,4 +1,5 @@
 import './stylesheets/Course.css';
+import ReactTooltip from 'react-tooltip';
 import React, { Component } from "react";
 
 class Course extends Component {
@@ -10,10 +11,31 @@ class Course extends Component {
   //Course lowest level component
 
   render() {
-    const {course_data} = this.props;
+    const {
+      course_data,
+      p_key, s_key, c_key
+    } = this.props;
+
     return (
       <div className="course">
-        {course_data.name}
+        <div
+          className="course_code"
+          data-tip data-for={`p${p_key}s${s_key}c${c_key}`}
+        >
+          {course_data.code}
+        </div>
+        <ReactTooltip
+          id={`p${p_key}s${s_key}c${c_key}`}
+          place="right"
+          type="light"
+          effect="float"
+        >
+          {`Class Code: ${course_data.code}`}
+          <br/>
+          {`Class Name: ${course_data.name}`}
+          <br />
+          {`Taken For: ${course_data.taken_for}`}
+        </ReactTooltip>
       </div>
     );
   }

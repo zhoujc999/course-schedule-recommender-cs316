@@ -35,3 +35,13 @@
 .search-bar {
   margin-top: 20px;
 }
+
+.empty_plan_container {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.empty_plan_text {
+  font-size: 24px;
+  color: #00334e;
+}

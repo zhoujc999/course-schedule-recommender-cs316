@@ -1,16 +1,19 @@
+/*jshint esversion: 6 */
 import './stylesheets/Home.css';
 import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Plan from './Plan'
 import Select from 'react-dropdown-select';
 import React, { Component } from "react";
+import axios from 'axios';
 
 //Temporary plan options for user to select from
 //TODO add logic to get options from backend (programs table)
 //TODO add option to add new plan if logged in?
-const DUMMY_OPTIONS = [{value:'Culinary Arts', label:'Culinary Arts'}, {value:'Psychology', label:'Psychology'}];
+
+//const DUMMY_OPTIONS = [{value:'Culinary Arts', label:'Culinary Arts'}, {value:'Psychology', label:'Psychology'}];
 const DUMMY_SEMESTERS = [
-  { sem_num: 1, courses: [ {code: "ART101", name: "Art101", taken_for: "Culinary Arts B.A."}, {code: "PASTA101", name: "Cooking101", taken_for: "Culinary Arts B.A."} ] },
+  { sem_num: 1, courses: [ {code: "ART101", name: "Intro to Art", taken_for: "Culinary Arts B.A."}, {code: "PASTA101", name: "Cooking101", taken_for: "Culinary Arts B.A."} ] },
   { sem_num: 2, courses: [ {code: "PASTA102", name: "The Art of Spaghetti", taken_for: "Culinary Arts B.A."} ] },
   { sem_num: 3, courses: [ {code: "PASTA201", name: "Macaroni Art", taken_for: "Culinary Arts B.A."} ] },
   { sem_num: 4, courses: [ {code: "PASTA305", name: "Linguini Painting", taken_for: "Culinary Arts B.A."}, {code: "PASTA255", name: "Tortellini Sculpting", taken_for: "Culinary Arts B.A."} ] },
@@ -22,7 +25,8 @@ const DUMMY_PLANS = [{
       {name: "Culinary Arts", type: "B.A."},
       {name: "Astrophysics", type: "Ph.D."}
     ],
-    user: 'joe24'
+    user: 'joe24',
+    description: "I'm Joe 24, this is my description, I am a DUMMY, FIX ME PLS"
   },
   semesters: DUMMY_SEMESTERS
 }];
@@ -37,11 +41,32 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      options: [],
       selected: [],
       plans: [],
-      querySubmitted: false
+      querySubmitted: false,
+      error: null
     };
     this.handleSearchPlans = this.handleSearchPlans.bind(this);
+  }
+
+  componentDidMount() {
+    this.getOptions().then(res => {
+      this.setState({options: res});
+    })
+  }
+
+  getOptions() {
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    return axios.get(programUrl)
+    .then(res => {
+      const programs = [...new Set(res.data.map(val => val.name))];
+      programs.sort();
+      return programs.map(p => ({value: p, label: p}));
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
   }
 
   handleSearchPlans() {
@@ -69,7 +94,7 @@ class Home extends Component {
               multi
               clearable
               create
-              options={DUMMY_OPTIONS}
+              options={this.state.options}
               values={this.state.selected}
               placeholder={"Select Plan(s)"}
               onChange={(values) => this.setState({ selected: values })}
@@ -91,9 +116,18 @@ class Home extends Component {
   }
 
   renderEmptyPlans() {
+    //Renders text when nothing found from query
     return (
-      <div>
-        No Plans Found
+      <div className="empty_plan_container">
+        <div className="empty_plan_text">
+          Oh no! No plans found for your query!
+          <br />
+          <br />
+          Go Home to go back and make a new query
+          <br />
+          <br />
+          Or Log In/Sign Up and add a plan
+        </div>
       </div>
     )
   }
@@ -119,6 +153,7 @@ class Home extends Component {
       planComponents.push(
         <Plan
           input={plans[i]}
+          p_key={i}
           key={i}
         />);
     }
@@ -131,10 +166,13 @@ class Home extends Component {
 
   render() {
     //When plans is empty, display jumbotron, otherwise render the plans
-    const { querySubmitted } = this.state;
+    const { querySubmitted, options } = this.state;
     return (
       <div>
-        {querySubmitted === false ? this.renderJumbo() : this.renderPlans()}
+        {options.length > 0
+          ? (querySubmitted === false ? this.renderJumbo() : this.renderPlans())
+          : (<div> Loading... </div>)
+        }
       </div>
     );
   }
