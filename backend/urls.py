@@ -35,5 +35,6 @@ urlpatterns = [
     path('signup', RecommenderViews.index, name='index'),
     path('account', RecommenderViews.index, name='index'),
     path('api/', include(router.urls)),
+    path('api/plans', RecommenderViews.PlanView.as_view()),
     path('admin/', admin.site.urls),
 ]
