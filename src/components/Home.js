@@ -12,7 +12,7 @@ import axios from 'axios';
 //TODO add option to add new plan if logged in?
 
 const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
-const getPrograms = () => {
+const getPrograms = function() {
   return axios.get(programUrl);
 };
 
