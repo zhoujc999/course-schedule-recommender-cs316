@@ -464,7 +464,7 @@ class Account extends Component {
   makeCourses(semester) {
     //Creates Course Forms for each semester
     const courseCodePlaceholder = "ex. AMI215/MATH212/etc.";
-    const courseNamePlaceholder = "ex. Animated Film/Multivariable Calculus/etc.";
+    const courseNamePlaceholder = "ex. Animated Film/Soccer Politics/etc.";
     const coursePurposePlaceholder = "ex. Program/T-Req/Fun/etc.";
     const taken_options = [
       ...new Set(this.state.completed.map(prog => prog.name + " " + prog.type))
@@ -577,9 +577,13 @@ class Account extends Component {
               onChange={ this.handleCourseChange(i, semester.sem_num, "taken_for") }
               values={
                 [course.taken_for !== "" &&
-                taken_options.find(val => val.taken_for === course.taken_for)]
+                taken_options.find(val =>
+                  val.taken_for === course.taken_for
+                ) !== undefined ? taken_options.find(val => val.taken_for === course.taken_for)
+                : {taken_for: ''}
+                ]
               }
-              options={ taken_options }
+              options={ taken_options.filter(val => val !== '' & val !== ' ') }
             />
           </div>
         </div>
@@ -617,6 +621,8 @@ class Account extends Component {
     //Render schedule with at least one semester
     //TODO: replace DUMMY_SEMESTERS with real data
     const { semesters, semsUpdated } = this.state;
+    console.log('RENDERING SEMESTERs')
+    console.log(semesters)
     const sems = this.state.semesters.map((sem, i) => (
         <div className="indiv_semester" key={i}>
           <div className="semester_label">Semester {sem.sem_num}</div>
@@ -707,6 +713,12 @@ class Account extends Component {
       </div>
     );
   }
+
+  // componentDidUpdate() {
+  // For Debugging state changes
+  //   console.log('component update')
+  //   console.log(this.state)
+  // }
 
   componentDidMount() {
     //TODO: Get existing data from database, if exists and put into state
