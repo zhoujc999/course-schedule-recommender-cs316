@@ -11,11 +11,6 @@ import axios from 'axios';
 //TODO add logic to get options from backend (programs table)
 //TODO add option to add new plan if logged in?
 
-const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
-const getPrograms = function() {
-  return axios.get(programUrl);
-};
-
 //const DUMMY_OPTIONS = [{value:'Culinary Arts', label:'Culinary Arts'}, {value:'Psychology', label:'Psychology'}];
 const DUMMY_SEMESTERS = [
   { sem_num: 1, courses: [ {code: "ART101", name: "Intro to Art", taken_for: "Culinary Arts B.A."}, {code: "PASTA101", name: "Cooking101", taken_for: "Culinary Arts B.A."} ] },
@@ -62,7 +57,9 @@ class Home extends Component {
 
   setOptions() {
     const OPTIONS = [];
-    getPrograms()
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+
+    axios.get(programUrl)
     .then(res => res.json()).then(res => {
       console.log(res);
       const programs = JSON.parse(res);
