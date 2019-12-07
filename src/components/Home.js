@@ -57,15 +57,23 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    console.log('1');
     this.setState({options: this.setOptions()});
   }
 
   setOptions() {
     const OPTIONS = [];
+    console.log('2');
     getPrograms()
-    .then(res => res.json()).then(res => {
+    .then(res => {
+      console.log('3')
+      console.log(res)
+      return res.json()
+    ).then(res => {
+      console.log('4')
       console.log(res);
       const programs = JSON.parse(res);
+      console.log('5')
       console.log(programs);
       for (let i = 0; i < programs.length; i++) {
         const program = {
