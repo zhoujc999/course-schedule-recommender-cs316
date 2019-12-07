@@ -47,7 +47,6 @@ class Home extends Component {
       querySubmitted: false,
       error: null
     };
-    this.setOptions = this.setOptions.bind(this);
     this.handleSearchPlans = this.handleSearchPlans.bind(this);
   }
 
