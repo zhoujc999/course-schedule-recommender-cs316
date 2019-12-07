@@ -66,7 +66,7 @@ class Home extends Component {
       console.log('5')
       console.log(res)
       return res.json();
-    ).then(res => {
+    }).then(res => {
       console.log('6')
       console.log(res);
       const programs = JSON.parse(res);
