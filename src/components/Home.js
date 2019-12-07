@@ -1,14 +1,22 @@
+/*jshint esversion: 6 */
 import './stylesheets/Home.css';
 import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Plan from './Plan'
 import Select from 'react-dropdown-select';
 import React, { Component } from "react";
+import axios from 'axios';
 
 //Temporary plan options for user to select from
 //TODO add logic to get options from backend (programs table)
 //TODO add option to add new plan if logged in?
-const DUMMY_OPTIONS = [{value:'Culinary Arts', label:'Culinary Arts'}, {value:'Psychology', label:'Psychology'}];
+
+const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+const getPrograms = () => {
+  return axios.get(programUrl);
+};
+
+//const DUMMY_OPTIONS = [{value:'Culinary Arts', label:'Culinary Arts'}, {value:'Psychology', label:'Psychology'}];
 const DUMMY_SEMESTERS = [
   { sem_num: 1, courses: [ {code: "ART101", name: "Art101", taken_for: "Culinary Arts B.A."}, {code: "PASTA101", name: "Cooking101", taken_for: "Culinary Arts B.A."} ] },
   { sem_num: 2, courses: [ {code: "PASTA102", name: "The Art of Spaghetti", taken_for: "Culinary Arts B.A."} ] },
@@ -39,9 +47,30 @@ class Home extends Component {
     this.state = {
       selected: [],
       plans: [],
-      querySubmitted: false
+      querySubmitted: false,
+      error: null
     };
+    this.options = this.setOptions();
     this.handleSearchPlans = this.handleSearchPlans.bind(this);
+  }
+
+  setOptions() {
+    const OPTIONS = [];
+    getPrograms()
+    .then(res => {
+      const programs = JSON.parse(res);
+      for (let i = 0; i < programs.length; i++) {
+        const program = {
+          value: programs[i].name,
+          label: programs[i].name
+        };
+        OPTIONS.push(program);
+      }
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+    return OPTIONS;
   }
 
   handleSearchPlans() {
@@ -69,7 +98,7 @@ class Home extends Component {
               multi
               clearable
               create
-              options={DUMMY_OPTIONS}
+              options={this.options}
               values={this.state.selected}
               placeholder={"Select Plan(s)"}
               onChange={(values) => this.setState({ selected: values })}
