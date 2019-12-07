@@ -8,7 +8,25 @@ import React, { Component } from "react";
 //Temporary plan options for user to select from
 //TODO add logic to get options from backend (programs table)
 //TODO add option to add new plan if logged in?
-const DUMMY_OPTIONS = [{value:'hello', label:'Hello'}, {value:'jpw', label:'jpw'}];
+const DUMMY_OPTIONS = [{value:'Culinary Arts', label:'Culinary Arts'}, {value:'Psychology', label:'Psychology'}];
+const DUMMY_SEMESTERS = [
+  { sem_num: 1, courses: [ {code: "ART101", name: "Art101", taken_for: "Culinary Arts B.A."}, {code: "PASTA101", name: "Cooking101", taken_for: "Culinary Arts B.A."} ] },
+  { sem_num: 2, courses: [ {code: "PASTA102", name: "The Art of Spaghetti", taken_for: "Culinary Arts B.A."} ] },
+  { sem_num: 3, courses: [ {code: "PASTA201", name: "Macaroni Art", taken_for: "Culinary Arts B.A."} ] },
+  { sem_num: 4, courses: [ {code: "PASTA305", name: "Linguini Painting", taken_for: "Culinary Arts B.A."}, {code: "PASTA255", name: "Tortellini Sculpting", taken_for: "Culinary Arts B.A."} ] },
+  { sem_num: 5, courses: [ {code: "PASTA420", name: "Writing Orzo", taken_for: "Culinary Arts B.A."}, {code: "PASTA465", name: "Photographing Capellini", taken_for: "Culinary Arts B.A."} ] },
+];
+const DUMMY_PLANS = [{
+  planInfo:
+    {programs: [
+      {name: "Culinary Arts", type: "B.A."},
+      {name: "Astrophysics", type: "Ph.D."}
+    ],
+    user: 'joe24'
+  },
+  semesters: DUMMY_SEMESTERS
+}];
+
 
 class Home extends Component {
   /* Homepage of app where users enter plans they want to see
@@ -19,8 +37,9 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected:[],
-      plans:[]
+      selected: [],
+      plans: [],
+      querySubmitted: false
     };
     this.handleSearchPlans = this.handleSearchPlans.bind(this);
   }
@@ -28,7 +47,15 @@ class Home extends Component {
   handleSearchPlans() {
     //Updates plans in state based on what is selected
     const { selected } = this.state;
-    this.setState({plans:selected});
+    // TODO add logic to get real plan data based on selected
+    // Below is DUMMY data that needs replacing
+    const plans = DUMMY_PLANS.filter(plan => {
+      return selected.some(s => {
+        let p = plan.planInfo.programs.find(program => program.name === s.value);
+        return p !== undefined
+      })
+    });
+    this.setState({ plans, querySubmitted: true });
   }
 
   renderJumbo() {
@@ -45,8 +72,8 @@ class Home extends Component {
               options={DUMMY_OPTIONS}
               values={this.state.selected}
               placeholder={"Select Plan(s)"}
-              onChange={(values) => this.setState({selected:values})}
-              onCreateNew={(value) => this.setState({selected:[...this.state.selected, value]})}
+              onChange={(values) => this.setState({ selected: values })}
+              onCreateNew={(value) => this.setState({ selected: [...this.state.selected, value] })}
             />
             </div>
             <div className="btn">
@@ -63,7 +90,24 @@ class Home extends Component {
     );
   }
 
+  renderEmptyPlans() {
+    return (
+      <div>
+        No Plans Found
+      </div>
+    )
+  }
+
   renderPlans() {
+    const { plans } = this.state;
+    return (
+      <div>
+        {plans.length > 0 ? this.renderPlanComponents() : this.renderEmptyPlans()}
+      </div>
+    );
+  }
+
+  renderPlanComponents() {
     //Renders plans based on what user selected in state
     const { plans } = this.state;
     /* TODO logic to find relevant plans from database
@@ -87,10 +131,10 @@ class Home extends Component {
 
   render() {
     //When plans is empty, display jumbotron, otherwise render the plans
-    const { plans } = this.state;
+    const { querySubmitted } = this.state;
     return (
       <div>
-        {plans.length === 0 ? this.renderJumbo() : this.renderPlans()}
+        {querySubmitted === false ? this.renderJumbo() : this.renderPlans()}
       </div>
     );
   }

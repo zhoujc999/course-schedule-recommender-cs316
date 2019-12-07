@@ -10,10 +10,10 @@ class Course extends Component {
   //Course lowest level component
 
   render() {
-    const {data} = this.props;
+    const {course_data} = this.props;
     return (
       <div className="course">
-        {data}
+        {course_data.name}
       </div>
     );
   }
