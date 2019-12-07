@@ -60,7 +60,7 @@ class Home extends Component {
     const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
     return axios.get(programUrl)
     .then(res => {
-      const programs = res.data.map(val => val.name);
+      const programs = [...new Set(res.data.map(val => val.name))];
       programs.sort();
       return programs.map(p => ({value: p, label: p}));
     })

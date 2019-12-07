@@ -29,7 +29,8 @@ class Account extends Component {
       semesters: [], //Sems of classes completed -> Semester + Class DB
       bioUpdated: "INITIAL",
       progUpdated: "INITIAL",
-      semsUpdated: "INITIAL"
+      semsUpdated: "INITIAL",
+      error: false
     };
     this.handleBioUpdate = this.handleBioUpdate.bind(this);
     this.handleBioSubmit = this.handleBioSubmit.bind(this);
@@ -696,6 +697,17 @@ class Account extends Component {
       accountInfo: DUMMY_ACCOUNT_INFO,
       completed: DUMMY_COMPLETED,
       semesters: DUMMY_SEMESTERS,
+    });
+  }
+
+  getAccountInfo() {
+    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    return axios.get(studentURL)
+    .then(res => {
+      return res;
+    })
+    .catch(err => {
+      this.setState({error: err});
     });
   }
 
