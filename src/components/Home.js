@@ -59,7 +59,8 @@ class Home extends Component {
   setOptions() {
     const OPTIONS = [];
     getPrograms()
-    .then(res => {
+    .then(res => res.json()).then(res => {
+      console.log(res);
       const programs = JSON.parse(res);
       console.log(programs);
       for (let i = 0; i < programs.length; i++) {
@@ -68,7 +69,7 @@ class Home extends Component {
           label: programs[i].name
         };
         OPTIONS.push(program);
-        this.log(program.label);
+        console.log(program.label);
       }
     })
     .catch(err => {
