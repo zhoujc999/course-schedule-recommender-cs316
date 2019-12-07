@@ -62,7 +62,7 @@ class Home extends Component {
     console.log('3')
     const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
     console.log('4')
-    axios.get(programUrl)
+    return axios.get(programUrl)
     .then(res => {
       console.log('5')
       console.log(res)
@@ -81,11 +81,12 @@ class Home extends Component {
         OPTIONS.push(program);
         console.log(program.label);
       }
+      return OPTIONS;
     })
     .catch(err => {
       this.setState({error: err});
     });
-    return OPTIONS;
+    // return OPTIONS;
   }
 
   handleSearchPlans() {
