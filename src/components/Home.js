@@ -57,19 +57,20 @@ class Home extends Component {
   }
 
   setOptions() {
-    const OPTIONS = [];
+    const options = [];
     const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
     return axios.get(programUrl)
     .then(res => {
-      const programs = [...new Set(res.data)];
+      const programs = [...new Set(res.data.map(val => val.name));
       for (let i = 0; i < programs.length; i++) {
         const program = {
-          value: programs[i].name,
-          label: programs[i].name
+          value: programs[i],
+          label: programs[i]
         };
-        OPTIONS.push(program);
+        options.push(program);
       }
-      return OPTIONS;
+      options.sort();
+      return options;
     })
     .catch(err => {
       this.setState({error: err});
