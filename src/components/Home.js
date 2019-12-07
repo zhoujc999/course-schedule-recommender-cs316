@@ -46,14 +46,18 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      options: [],
       selected: [],
       plans: [],
       querySubmitted: false,
       error: null
     };
-    this.options = this.setOptions();
-    console.log(this.options);
+    this.setOptions = this.setOptions.bind(this);
     this.handleSearchPlans = this.handleSearchPlans.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({options: this.setOptions()});
   }
 
   setOptions() {
