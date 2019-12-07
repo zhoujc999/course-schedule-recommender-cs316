@@ -188,10 +188,14 @@ class Home extends Component {
 
   render() {
     //When plans is empty, display jumbotron, otherwise render the plans
-    const { querySubmitted } = this.state;
+    const { querySubmitted, options } = this.state;
+    console.log(this.state)
     return (
       <div>
-        {querySubmitted === false ? this.renderJumbo() : this.renderPlans()}
+        {options.length > 0
+          ? (querySubmitted === false ? this.renderJumbo() : this.renderPlans())
+          : (<div> Loading... </div>)
+        }
       </div>
     );
   }
