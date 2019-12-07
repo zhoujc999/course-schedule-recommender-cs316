@@ -116,7 +116,7 @@ class Home extends Component {
               multi
               clearable
               create
-              options={this.options}
+              options={this.state.options}
               values={this.state.selected}
               placeholder={"Select Plan(s)"}
               onChange={(values) => this.setState({ selected: values })}
