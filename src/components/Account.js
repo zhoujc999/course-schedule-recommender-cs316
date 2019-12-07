@@ -694,6 +694,7 @@ class Account extends Component {
 
   componentDidMount() {
     //TODO: Get existing data from database, if exists and put into state
+    console.log(this.props)
     this.setState({
       accountInfo: DUMMY_ACCOUNT_INFO,
       completed: DUMMY_COMPLETED,
