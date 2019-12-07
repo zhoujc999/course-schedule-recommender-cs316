@@ -62,7 +62,7 @@ class Home extends Component {
     .then(res => {
       const programs = res.data.map(val => val.name);
       programs.sort();
-      return programs.map(p => {value: p, label: p});
+      return programs.map(p => ({value: p, label: p}));
     })
     .catch(err => {
       this.setState({error: err});
