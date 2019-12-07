@@ -51,44 +51,29 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    console.log('1');
     this.setOptions().then(res => {
-      console.log(res)
       this.setState({options: res});
     })
   }
 
   setOptions() {
-    console.log('2')
     const OPTIONS = [];
-    console.log('3')
     const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
-    console.log('4')
     return axios.get(programUrl)
     .then(res => {
-    //   console.log('5')
-    //   console.log(res)
-    //   return res.json();
-    // }).then(res => {
-    //   console.log('6')
-    //   console.log(res);
-      const programs = res.data;
-      console.log('5')
-      console.log(programs);
+      const programs = [...new Set(res.data)];
       for (let i = 0; i < programs.length; i++) {
         const program = {
           value: programs[i].name,
           label: programs[i].name
         };
         OPTIONS.push(program);
-        // console.log(program.label);
       }
       return OPTIONS;
     })
     .catch(err => {
       this.setState({error: err});
     });
-    // return OPTIONS;
   }
 
   handleSearchPlans() {
@@ -189,7 +174,6 @@ class Home extends Component {
   render() {
     //When plans is empty, display jumbotron, otherwise render the plans
     const { querySubmitted, options } = this.state;
-    console.log(this.state)
     return (
       <div>
         {options.length > 0
