@@ -51,26 +51,18 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.setOptions().then(res => {
+    this.getOptions().then(res => {
       this.setState({options: res});
     })
   }
 
-  setOptions() {
-    const options = [];
+  getOptions() {
     const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
     return axios.get(programUrl)
     .then(res => {
-      const programs = [...new Set(res.data.map(val => val.name))];
-      for (let i = 0; i < programs.length; i++) {
-        const program = {
-          value: programs[i],
-          label: programs[i]
-        };
-        options.push(program);
-      }
-      options.sort();
-      return options;
+      const programs = res.data.map(val => val.name);
+      programs.sort();
+      return programs.map(p => {value: p, label: p});
     })
     .catch(err => {
       this.setState({error: err});
