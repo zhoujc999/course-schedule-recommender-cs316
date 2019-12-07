@@ -468,7 +468,7 @@ class Account extends Component {
     const coursePurposePlaceholder = "ex. Program/T-Req/Fun/etc.";
     const taken_options = [
       ...new Set(this.state.completed.map(prog => prog.name + " " + prog.type))
-      .add('T-Reqs').add('Fun')
+      .add('T-Reqs').add('Fun').add('Other')
     ].map(val => {return {taken_for: val}});
     const courses = semester.courses.map((course, i) => (
       <div className="indiv_course" key={i}>
