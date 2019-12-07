@@ -52,6 +52,7 @@ class Home extends Component {
       error: null
     };
     this.options = this.setOptions();
+    console.log(this.options);
     this.handleSearchPlans = this.handleSearchPlans.bind(this);
   }
 
@@ -60,12 +61,14 @@ class Home extends Component {
     getPrograms()
     .then(res => {
       const programs = JSON.parse(res);
+      console.log(programs);
       for (let i = 0; i < programs.length; i++) {
         const program = {
           value: programs[i].name,
           label: programs[i].name
         };
         OPTIONS.push(program);
+        this.log(program.label);
       }
     })
     .catch(err => {
