@@ -106,6 +106,7 @@ class Account extends Component {
   handleProgramUpdate() {
     //Check to make sure nothing is empty
     const { completed } = this.state;
+    console.log(this.props.token);
     let canUpdate = true;
     for (let i = 0; i < completed.length; i++) {
       if (completed[i].name.trim() === "" || completed[i].type.trim() === "") {
@@ -115,7 +116,6 @@ class Account extends Component {
 
     //send post request to backend if completed programs are not empty
     if (canUpdate) {
-      console.log(this.props.token);
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': 'FirebaseToken '+ this.props.token
