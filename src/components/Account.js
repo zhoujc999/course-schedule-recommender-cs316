@@ -807,7 +807,6 @@ class Account extends Component {
     });
   }
 
->>>>>>> 04b0e93abdf60a6a2e00941e062d983a9879c687
   render() {
     const { completed, semesters } = this.state;
     return (
