@@ -702,8 +702,8 @@ class Account extends Component {
         console.log(progRes);
         this.setState({
           accountInfo: {netid: accountRes.data.netid, bio: accountRes.data.description},
-          programOptions: progRes.data.programs,
-          typeOptions: progRes.data.types,
+          programOptions: progRes.programs,
+          typeOptions: progRes.types,
           completed: DUMMY_COMPLETED,
           semesters: DUMMY_SEMESTERS
         })
@@ -741,6 +741,7 @@ class Account extends Component {
 
   render() {
     const { completed, semesters } = this.state;
+    console.log(this.state)
     return (
       <div className="page_container">
         <div className="account_container">
