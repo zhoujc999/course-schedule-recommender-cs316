@@ -851,7 +851,7 @@ class Account extends Component {
       return (
         <div>
           Loading...
-        <div>
+        </div>
       );
     }
     return (
