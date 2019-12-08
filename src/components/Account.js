@@ -727,7 +727,7 @@ class Account extends Component {
               console.log(compRes);
               console.log(classRes);
               console.log(semRes);
-              let compFinal, semsFinal;
+              let compFinal;
               if (compRes.length === 0) {
                 compFinal = [];
               } else {
@@ -736,9 +736,8 @@ class Account extends Component {
                   return ({ name: progInfo.name, type: progInfo.type });
                 })
               }
-              if (semRes.length === 0) {
-                semsFinal = [];
-              } else {
+              let semsFinal = [];
+              if (semRes.length !== 0) {
                 let maxSemNum = 0;
                 for (let i = 0; i < semRes.length; i++){
                   if (semRes[i].semester_number > maxSemNum) {
