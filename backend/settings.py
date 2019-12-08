@@ -129,12 +129,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-	'rest_framework.authentication.SessionAuthentication',
-	'rest_framework.authentication.BasicAuthentication',
-	'backend.authentication.FirebaseAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'backend.authentication.FirebaseAuthentication',
 	),
     'DEFAULT_PERMISSION_CLASSES': (
         'recommender.permissions.ReadPermission',
+        'rest_framework.permissions.AllowAny',
     ),
 }
 

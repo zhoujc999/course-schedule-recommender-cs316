@@ -11,7 +11,7 @@ class BaseFirebaseAuthentication(authentication.BaseAuthentication):
     Clients should authenticate by passing a Firebase ID Token in the
     "Authorization" HTTP header, preprended with the string "<keyword> " where
     <keyword> is this classes `keyword` string property. For example:
-    Authorization: FirebaseToken xxxxx.yyyyy.zzzzz
+    Authorization: FirebaseToken xxxxxyyyyyzzzzz
     """
     keyword = 'FirebaseToken'
     check_revoked = False
