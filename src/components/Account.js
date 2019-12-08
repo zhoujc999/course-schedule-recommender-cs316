@@ -709,12 +709,12 @@ class Account extends Component {
           console.log(accountRes);
           console.log(progRes);
           console.log(compRes);
-          let comp;
+          let compFinal;
           if (compRes.length === 0) {
-            comp = [];
+            compFinal = [];
           } else {
-            comp = compRes.map(obj => {
-              progInfo = progRes.allPrograms.find(p => p.pid === obj.pid_id)
+            compFinal = compRes.map(obj => {
+              let progInfo = progRes.allPrograms.find(p => p.pid === obj.pid_id)
               return ({name: progInfo.name, type: progInfo.type});
             })
           }
@@ -722,7 +722,7 @@ class Account extends Component {
             accountInfo: {netid: accountRes.netid, bio: accountRes.description},
             programOptions: progRes.programs,
             typeOptions: progRes.types,
-            completed: compRes,
+            completed: compFinal,
             semesters: DUMMY_SEMESTERS
           })
         })
