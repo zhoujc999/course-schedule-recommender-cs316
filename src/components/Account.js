@@ -106,6 +106,9 @@ class Account extends Component {
     console.log('updating backend');
     console.log(this.state);
 
+    updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=man44";
+    axios.post()
+
     const { completed } = this.state;
     let canUpdate = true;
     for (let i = 0; i < completed.length; i++) {
