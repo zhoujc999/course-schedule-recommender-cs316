@@ -695,16 +695,18 @@ class Account extends Component {
   componentDidMount() {
     //TODO: Get existing data from database, if exists and put into state
     console.log(this.props)
-    this.setState({
-      accountInfo: DUMMY_ACCOUNT_INFO,
-      completed: DUMMY_COMPLETED,
-      semesters: DUMMY_SEMESTERS,
-    });
+    getAccountInfo().then(accountRes =>
+      this.setState({
+        accountInfo: {netid: accountRes.netid, bio: accountRes.description},
+        completed: DUMMY_COMPLETED,
+        semesters: DUMMY_SEMESTERS
+      });
+    );
   }
 
   getAccountInfo() {
-    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/programs/";
-    return axios.get(studentURL)
+    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
+    return axios.get(`${studentURL}${this.props.netid}`)
     .then(res => {
       return res;
     })
