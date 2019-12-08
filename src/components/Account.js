@@ -528,16 +528,16 @@ class Account extends Component {
               onChange={ this.handleCourseChange(i, semester.sem_num, "code") }
               values={
                 [course.code.trim() !== "" &&
-                allCourses.find(val => val.code === course.code)]
+                this.state.allCourses.find(val => val.code === course.code)]
               }
-              options={ allCourses }
+              options={ this.state.allCourses }
             />
           </div>
           <span className="vl" />
           <span className="course_form_label">Name: </span>
           <div className="course_form_name">
-            {allCourses.find(val => val.code === course.code) !== undefined
-              ? allCourses.find(val => val.code === course.code).name
+            {this.state.allCourses.find(val => val.code === course.code) !== undefined
+              ? this.state.allCourses.find(val => val.code === course.code).name
               : ""
             }
           </div>
@@ -831,7 +831,7 @@ class Account extends Component {
 
   getClassInfo() {
     const classURL = "https://course-schedule-recommender.herokuapp.com/api/classes/";
-    return axios.get(`${semesterURL}${this.props.netid}`)
+    return axios.get(`${classURL}${this.props.netid}`)
     .then(res => {
       return res.data.map(c => ({ code: c.classid, name: c.name }));
     })
