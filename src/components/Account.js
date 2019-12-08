@@ -35,7 +35,8 @@ class Account extends Component {
       typeOptions: [],
       error: false,
       allPrograms: [],
-      allCourses: []
+      allCourses: [],
+      loading: "INITIAL"
     };
     this.handleBioUpdate = this.handleBioUpdate.bind(this);
     this.handleBioSubmit = this.handleBioSubmit.bind(this);
@@ -339,7 +340,7 @@ class Account extends Component {
                   : {name: ''}
                 ]
               }
-              options={ DUMMY_PROGRAMS }
+              options={ this.state.programOptions }
             />
           </div>
           <div className="type_label">Type:</div>
@@ -379,7 +380,7 @@ class Account extends Component {
                   : {type: ''}
                 ]
               }
-              options={ DUMMY_TYPES }
+              options={ this.state.typeOptions }
             />
           </div>
         </div>
@@ -738,7 +739,7 @@ class Account extends Component {
               console.log(compRes);
               console.log(classRes);
               console.log(semRes);
-              let compFinal, semsFinal;
+              let compFinal;
               if (compRes.length === 0) {
                 compFinal = [];
               } else {
@@ -747,26 +748,28 @@ class Account extends Component {
                   return ({ name: progInfo.name, type: progInfo.type });
                 })
               }
-              if (semRes.length === 0) {
-                semsFinal = [];
-              } else {
+              let semsFinal = [];
+              if (semRes.length !== 0) {
                 let maxSemNum = 0;
                 for (let i = 0; i < semRes.length; i++){
                   if (semRes[i].semester_number > maxSemNum) {
                     maxSemNum = semRes[i].semester_number;
                   }
                 }
+                console.log(maxSemNum);
                 for (let j = 0; j < maxSemNum; j++) {
-                  let newSem = { semNum: j+1, courses: [] };
-                  semRes.filter(course => course.semester_number === j)
+                  let newSem = { sem_num: j+1, courses: [] };
+                  semRes.filter(course => course.semester_number === j+1)
                     .forEach(c => {
                       let takenFor = progRes.allPrograms.find(p => p.pid === c.pid_id);
                       newSem.courses.push({
                         code: c.classid_id,
                         taken_for: `${takenFor.name} ${takenFor.type}`
                       });
+                      console.log(newSem);
                     });
                   semsFinal.push(newSem);
+                  console.log(semsFinal);
                 }
               }
               this.setState({
@@ -776,7 +779,8 @@ class Account extends Component {
                 completed: compFinal,
                 semesters: semsFinal,
                 allPrograms: progRes.allPrograms,
-                allCourses: classRes
+                allCourses: classRes,
+                loading: "SUCCESS"
               })
             })
           })
@@ -790,7 +794,7 @@ class Account extends Component {
     return axios.get(studentURL)
     .then(res => {
       if (res.data.detail !== undefined) {
-        return { netid: this.props.netid, bio: "" };
+        return { netid: this.props.netid, description: "" };
       }
       else {
         return res.data;
@@ -842,7 +846,7 @@ class Account extends Component {
 
   getClassInfo() {
     const classURL = "https://course-schedule-recommender.herokuapp.com/api/classes/";
-    return axios.get(`${classURL}${this.props.netid}`)
+    return axios.get(classURL)
     .then(res => {
       return res.data.map(c => ({ code: c.classid, name: c.name }));
     })
@@ -852,7 +856,15 @@ class Account extends Component {
   }
 
   render() {
-    const { completed, semesters } = this.state;
+    const { completed, semesters, loading } = this.state;
+    console.log(this.state)
+    if (loading !== "SUCCESS") {
+      return (
+        <div>
+          Loading...
+        </div>
+      );
+    }
     return (
       <div className="page_container">
         <div className="account_container">
