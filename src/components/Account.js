@@ -746,7 +746,7 @@ class Account extends Component {
                 }
                 console.log(maxSemNum);
                 for (let j = 0; j < maxSemNum; j++) {
-                  let newSem = { semNum: j+1, courses: [] };
+                  let newSem = { sem_num: j+1, courses: [] };
                   semRes.filter(course => course.semester_number === j+1)
                     .forEach(c => {
                       let takenFor = progRes.allPrograms.find(p => p.pid === c.pid_id);
@@ -843,7 +843,15 @@ class Account extends Component {
   }
 
   render() {
-    const { completed, semesters } = this.state;
+    const { completed, semesters, allCourses } = this.state;
+    console.log(this.state)
+    if (allCourses.length === 0) {
+      return (
+        <div>
+          Loading...
+        <div>
+      );
+    }
     return (
       <div className="page_container">
         <div className="account_container">
