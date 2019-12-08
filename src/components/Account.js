@@ -309,8 +309,10 @@ class Account extends Component {
               onChange={ this.handleProgramChange(i) }
               values={
                 [prog.name !== "" &&
-                this.state.programOptions.find(val => val.value === prog.name)]
-              }
+                  this.state.programOptions.find(val => val.value === prog.name) !== undefined
+                  ? this.state.programOptions.find(val => val.value === prog.name)
+                  : {name: ''}
+                ]
               options={ this.state.programOptions }
             />
           </div>
@@ -346,7 +348,10 @@ class Account extends Component {
               onChange={ this.handleTypeChange(i) }
               values={
                 [prog.type !== "" &&
-                this.state.typeOptions.find(val => val.value === prog.type)]
+                  this.state.typeOptions.find(val => val.value === prog.type) !== undefined
+                  ? this.state.typeOptions.find(val => val.value === prog.type)
+                  : {type: ''}
+                ]
               }
               options={ this.state.typeOptions }
             />
@@ -703,6 +708,8 @@ class Account extends Component {
         console.log(progRes);
         this.setState({
           accountInfo: {netid: accountRes.data.netid, bio: accountRes.data.description},
+          programOptions: progRes.programs,
+          typeOptions: progRes.types,
           completed: DUMMY_COMPLETED,
           semesters: DUMMY_SEMESTERS
         })
