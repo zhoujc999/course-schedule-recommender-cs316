@@ -19,17 +19,17 @@ const DUMMY_SEMESTERS = [
   { sem_num: 4, courses: [ {code: "PASTA305", name: "Linguini Painting", taken_for: "Culinary Arts B.A."}, {code: "PASTA255", name: "Tortellini Sculpting", taken_for: "Culinary Arts B.A."} ] },
   { sem_num: 5, courses: [ {code: "PASTA420", name: "Writing Orzo", taken_for: "Culinary Arts B.A."}, {code: "PASTA465", name: "Photographing Capellini", taken_for: "Culinary Arts B.A."} ] },
 ];
-const DUMMY_PLANS = [{
-  planInfo:
-    {programs: [
-      {name: "Culinary Arts", type: "B.A."},
-      {name: "Astrophysics", type: "Ph.D."}
-    ],
-    user: 'joe24',
-    description: "I'm Joe 24, this is my description, I am a DUMMY, FIX ME PLS"
-  },
-  semesters: DUMMY_SEMESTERS
-}];
+// const DUMMY_PLANS = [{
+//   user: 'joe24',
+//   description: "I'm Joe 24, this is my description, I am a DUMMY, FIX ME PLS",
+//   planInfo: {
+//     programs: [
+//       {name: "Culinary Arts", type: "B.A."},
+//       {name: "Astrophysics", type: "Ph.D."}
+//     ],
+//   },
+//   semesters: DUMMY_SEMESTERS
+// }];
 
 
 class Home extends Component {
@@ -69,18 +69,44 @@ class Home extends Component {
     });
   }
 
+  getPlans() {
+    const { selected } = this.state;
+    for (let i = 0; i < selected.length; i++) {
+      selected[i] = (selected[i].indexOf(" ") === -1)? selected[i] : selected[i].replace(" ", "%20");
+    }
+    
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/plans?programs=";
+    axios.get(programUrl+selected.join(","))
+    .then(res => {
+      return res.data.map(plan => ({
+        user: plan.netid,
+        description: plan.Description,
+        planInfo: {
+          //TODO: change the attribute based on the actual response body
+          programs: plan.programs.map(val => ({name: val.name, type: val.type}))
+        },
+        semesters: plan.semesters
+      }))
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
   handleSearchPlans() {
     //Updates plans in state based on what is selected
     const { selected } = this.state;
-    // TODO add logic to get real plan data based on selected
-    // Below is DUMMY data that needs replacing
-    const plans = DUMMY_PLANS.filter(plan => {
-      return selected.some(s => {
-        let p = plan.planInfo.programs.find(program => program.name === s.value);
-        return p !== undefined
-      })
-    });
-    this.setState({ plans, querySubmitted: true });
+    this.getPlans().then(res => {
+      // TODO add logic to get real plan data based on selected
+      // Below is DUMMY data that needs replacing
+      const plans = res.filter(plan => {
+        return selected.some(s => {
+          let p = plan.planInfo.programs.find(program => program.name === s.value);
+          return p !== undefined
+        })
+      });
+      this.setState({ plans, querySubmitted: true });
+    })
   }
 
   renderJumbo() {
