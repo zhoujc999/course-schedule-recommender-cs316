@@ -76,11 +76,8 @@ class Home extends Component {
     }
 
     const programUrl = "https://course-schedule-recommender.herokuapp.com/api/plans";
-    axios.get(programUrl, {
-      params: {
-        programs: selected.join(",")
-      }
-    })
+    console.log(selected.join(","));
+    axios.get(programUrl + selected.join(","))
     .then(res => {
       return res.data.map(plan => ({
         user: plan.netid,
