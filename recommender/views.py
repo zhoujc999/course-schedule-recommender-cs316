@@ -54,6 +54,25 @@ class CompletedView(viewsets.ModelViewSet):
     queryset = Completed.objects.all()
 
 
+class SemesterByNetidView(views.APIView):
+    permission_classes = (ReadPermission,)
+    def get(self, request, format=None):
+        netids = request.GET['netid']
+        netid_list = netids.split(",")
+        semester_list = list(Semester.objects.filter(netid__in=netid_list).values())
+        return JsonResponse(semester_list, safe=False)
+
+
+class CompletedByNetidView(views.APIView):
+    permission_classes = (ReadPermission,)
+    def get(self, request, format=None):
+        netids = request.GET['netid']
+        netid_list = netids.split(",")
+        completed_list = list(Completed.objects.filter(netid__in=netid_list).values())
+        return JsonResponse(completed_list, safe=False)
+
+
+
 class PlanView(views.APIView):
     permission_classes = (ReadPermission,)
     #  def get_queryset(self):
