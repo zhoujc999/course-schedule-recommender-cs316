@@ -64,11 +64,17 @@ class Account extends Component {
   }
 
   handleBioUpdate() {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': this.props.token
+    }
     const postBioUrl = "https://course-schedule-recommender.herokuapp.com/api/students/";
     axios.post(postBioUrl, {
-      token: this.props.token,
       netid: this.state.accountInfo.netid,
       description: this.state.accountInfo.bio
+    },
+    {
+      headers: headers
     })
     .then(res => {
       this.setState({ bioUpdated: "SUCCESS" });
@@ -100,8 +106,6 @@ class Account extends Component {
     console.log('updating backend');
     console.log(this.state);
 
-    updateProgramUrl =
-    axios.post()
     const { completed } = this.state;
     let canUpdate = true;
     for (let i = 0; i < completed.length; i++) {
