@@ -733,6 +733,7 @@ class Account extends Component {
         this.getCompleted().then(compRes => {
           this.getClassInfo().then(classRes => {
             this.getSemesters().then(semRes => {
+              console.log(accountRes);
               let compFinal;
               if (compRes.length === 0) {
                 compFinal = [];
@@ -782,7 +783,7 @@ class Account extends Component {
 
   getAccountInfo() {
     const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
-    return axios.get(studentURL)
+    return axios.get(`${studentURL}${this.props.netid}`)
     .then(res => {
       if (res.data.detail !== undefined) {
         return { netid: this.props.netid, description: "" };
@@ -853,6 +854,14 @@ class Account extends Component {
       return (
         <div>
           Loading...
+          <div class="sk-chase">
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+          </div>
         </div>
       );
     }
