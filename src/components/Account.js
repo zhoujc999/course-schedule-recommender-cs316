@@ -831,7 +831,7 @@ class Account extends Component {
 
   getClassInfo() {
     const classURL = "https://course-schedule-recommender.herokuapp.com/api/classes/";
-    return axios.get(`${classURL}${this.props.netid}`)
+    return axios.get(classURL)
     .then(res => {
       return res.data.map(c => ({ code: c.classid, name: c.name }));
     })
