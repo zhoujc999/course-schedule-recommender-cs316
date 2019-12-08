@@ -313,6 +313,7 @@ class Account extends Component {
                   ? this.state.programOptions.find(val => val.value === prog.name)
                   : {name: ''}
                 ]
+              }
               options={ this.state.programOptions }
             />
           </div>
