@@ -70,13 +70,17 @@ class Home extends Component {
   }
 
   getPlans() {
-    const { selected } = this.state;
+    const selected = this.state.selected.map(val => val.name);
     for (let i = 0; i < selected.length; i++) {
       selected[i] = (selected[i].indexOf(" ") === -1)? selected[i] : selected[i].replace(" ", "%20");
     }
-    
-    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/plans?programs=";
-    axios.get(programUrl+selected.join(","))
+
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/plans";
+    axios.get(programUrl, {
+      params: {
+        programs: selected.join(",")
+      }
+    })
     .then(res => {
       return res.data.map(plan => ({
         user: plan.netid,

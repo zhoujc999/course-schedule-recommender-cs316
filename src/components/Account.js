@@ -31,8 +31,6 @@ class Account extends Component {
       bioUpdated: "INITIAL",
       progUpdated: "INITIAL",
       semsUpdated: "INITIAL",
-      programOptions: [],
-      typeOptions: [],
       error: false
     };
     this.handleBioUpdate = this.handleBioUpdate.bind(this);
@@ -66,12 +64,18 @@ class Account extends Component {
   }
 
   handleBioUpdate() {
-    //This function should be "final" confirmation of bio change
-    //TODO: Send updated info to backend
-    //TODO: Get rid of console logs
-    console.log('updating backend');
-    console.log(this.state);
-    this.setState({ bioUpdated: "SUCCESS" });
+    const postBioUrl = "https://course-schedule-recommender.herokuapp.com/api/students/";
+    axios.post(postBioUrl, {
+      token: this.props.token,
+      netid: this.state.accountInfo.netid,
+      description: this.state.accountInfo.bio
+    })
+    .then(res => {
+      this.setState({ bioUpdated: "SUCCESS" });
+    })
+    .catch(err => {
+      this.setState({ bioUpdated: "FAILED", error: true });
+    });
   }
 
   handleProgramChange = i => selectedValue => {
@@ -309,12 +313,9 @@ class Account extends Component {
               onChange={ this.handleProgramChange(i) }
               values={
                 [prog.name !== "" &&
-                  this.state.programOptions.find(val => val.name === prog.name) !== undefined
-                  ? this.state.programOptions.find(val => val.name === prog.name)
-                  : {name: ''}
-                ]
+                DUMMY_PROGRAMS.find(val => val.name === prog.name)]
               }
-              options={ this.state.programOptions }
+              options={ DUMMY_PROGRAMS }
             />
           </div>
           <div className="type_label">Type:</div>
@@ -349,12 +350,9 @@ class Account extends Component {
               onChange={ this.handleTypeChange(i) }
               values={
                 [prog.type !== "" &&
-                  this.state.typeOptions.find(val => val.type === prog.type) !== undefined
-                  ? this.state.typeOptions.find(val => val.type === prog.type)
-                  : {type: ''}
-                ]
+                DUMMY_TYPES.find(val => val.type === prog.type)]
               }
-              options={ this.state.typeOptions }
+              options={ DUMMY_TYPES }
             />
           </div>
         </div>
@@ -702,25 +700,16 @@ class Account extends Component {
 
   componentDidMount() {
     //TODO: Get existing data from database, if exists and put into state
-    console.log(this.props)
-    this.getAccountInfo().then(accountRes => {
-      this.getProgramInfo().then(progRes => {
-        console.log(accountRes);
-        console.log(progRes);
-        this.setState({
-          accountInfo: {netid: accountRes.data.netid, bio: accountRes.data.description},
-          programOptions: progRes.programs,
-          typeOptions: progRes.types,
-          completed: DUMMY_COMPLETED,
-          semesters: DUMMY_SEMESTERS
-        })
-      })
+    this.setState({
+      accountInfo: DUMMY_ACCOUNT_INFO,
+      completed: DUMMY_COMPLETED,
+      semesters: DUMMY_SEMESTERS,
     });
   }
 
   getAccountInfo() {
-    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
-    return axios.get(`${studentURL}${this.props.netid}`)
+    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    return axios.get(studentURL)
     .then(res => {
       return res;
     })
@@ -729,26 +718,8 @@ class Account extends Component {
     });
   }
 
-  getProgramInfo() {
-    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
-    return axios.get(programUrl)
-    .then(res => {
-      const programs = [...new Set(res.data.map(val => val.name))];
-      const types = [...new Set(res.data.map(val => val.type))];
-      programs.sort();
-      types.sort();
-      const pMap = programs.map(p => ({name: p, label: p}));
-      const tMap = types.map(t => ({type: t, label: t}));
-      return {programs: pMap, types: tMap};
-    })
-    .catch(err => {
-      this.setState({error: err});
-    });
-  }
-
   render() {
     const { completed, semesters } = this.state;
-    console.log(this.state)
     return (
       <div className="page_container">
         <div className="account_container">
