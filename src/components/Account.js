@@ -329,7 +329,7 @@ class Account extends Component {
                   : {name: ''}
                 ]
               }
-              options={ DUMMY_PROGRAMS }
+              options={ this.state.programOptions }
             />
           </div>
           <div className="type_label">Type:</div>
@@ -369,7 +369,7 @@ class Account extends Component {
                   : {type: ''}
                 ]
               }
-              options={ DUMMY_TYPES }
+              options={ this.state.typeOptions }
             />
           </div>
         </div>
@@ -783,7 +783,7 @@ class Account extends Component {
     return axios.get(studentURL)
     .then(res => {
       if (res.data.detail !== undefined) {
-        return { netid: this.props.netid, bio: "" };
+        return { netid: this.props.netid, description: "" };
       }
       else {
         return res.data;
