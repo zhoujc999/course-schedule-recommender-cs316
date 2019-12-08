@@ -17,8 +17,8 @@ const DUMMY_SEMESTERS = [
   { sem_num: 4, courses: [ {code: "PASTA305", name: "Linguini Painting", taken_for: "Culinary Arts B.A."}, {code: "PASTA255", name: "Tortellini Sculpting", taken_for: "Culinary Arts B.A."} ] },
   { sem_num: 5, courses: [ {code: "PASTA420", name: "Writing Orzo", taken_for: "Culinary Arts B.A."}, {code: "PASTA465", name: "Photographing Capellini", taken_for: "Culinary Arts B.A."} ] },
 ];
-const DUMMY_TYPES = [{type: "B.A.", label: "B.A."}, {type: "B.S.", label: "B.S."}, {type: "Concentration", label: "Concentration"}, {type: "Ph.D.", label: "Ph.D."}, {type: "Minor", label: "Minor"}];
-const DUMMY_PROGRAMS = [{name: "Computer Science", label: "Computer Science"}, {name: "Psychology", label: "Psychology"}, {name: "Astrophysics", label: "Astrophysics"}, {name: "Culinary Arts", label: "Culinary Arts"}];
+const DUMMY_TYPES = [{value: "B.A.", label: "B.A."}, {value: "B.S.", label: "B.S."}, {value: "Concentration", label: "Concentration"}, {value: "Ph.D.", label: "Ph.D."}, {value: "Minor", label: "Minor"}];
+const DUMMY_PROGRAMS = [{value: "Computer Science", label: "Computer Science"}, {value: "Psychology", label: "Psychology"}, {value: "Astrophysics", label: "Astrophysics"}, {value: "Culinary Arts", label: "Culinary Arts"}];
 const DUMMY_COURSES = [{code: "ART101", name: "Art101"}, {code: "PASTA102", name: "Cooking101"}, {code: "PASTA201", name: "The Art of Spaghetti"}, {code: "PASTA101", name: "Macaroni Art"}, {code: "PASTA305", name: "Linguini Painting"}, {code: "PASTA255", name: "Tortellini Sculpting"}, {code: "PASTA420", name: "Writing Orzo"}, {code: "PASTA465", name: "Photographing Capellini"}, {code: "MATH212", name: "Multivariable Calculus"}, {code: "CHEM101", name: "Intro to Chemistry"}];
 
 class Account extends Component {
@@ -31,8 +31,8 @@ class Account extends Component {
       bioUpdated: "INITIAL",
       progUpdated: "INITIAL",
       semsUpdated: "INITIAL",
-      programOptions: [],
-      typeOptions: [],
+      programOptions: DUMMY_PROGRAMS,
+      typeOptions: DUMMY_TYPES,
       error: false
     };
     this.handleBioUpdate = this.handleBioUpdate.bind(this);
@@ -703,8 +703,6 @@ class Account extends Component {
         console.log(progRes);
         this.setState({
           accountInfo: {netid: accountRes.data.netid, bio: accountRes.data.description},
-          programOptions: progRes.programs,
-          typeOptions: progRes.types,
           completed: DUMMY_COMPLETED,
           semesters: DUMMY_SEMESTERS
         })
