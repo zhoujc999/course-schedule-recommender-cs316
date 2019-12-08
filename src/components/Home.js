@@ -75,12 +75,9 @@ class Home extends Component {
       selected[i] = (selected[i].indexOf(" ") === -1)? selected[i] : selected[i].replace(/\s/gi, "%20");
     }
 
-    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/plans";
-    axios.get(programUrl, {
-      params: {
-        programs: selected.join(",")
-      }
-    })
+    const planUrl = "https://course-schedule-recommender.herokuapp.com/api/plans?programs=";
+    console.log(planUrl+selected.join(","));
+    axios.get(planUrl + selected.join(","))
     .then(res => {
       return res.data.map(plan => ({
         user: plan.netid,
@@ -90,7 +87,7 @@ class Home extends Component {
           programs: plan.programs.map(val => ({name: val.name, type: val.type}))
         },
         semesters: plan.semesters
-      }))
+      }));
     })
     .catch(err => {
       this.setState({error: err});
