@@ -56,7 +56,7 @@ class Login extends Component {
             this.setState({error: err});
           });
 
-          this.props.history.push('/account');
+          // this.props.history.push('/account');
         }
       })
       .catch(err => {
