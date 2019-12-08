@@ -75,7 +75,7 @@ class Home extends Component {
       selected[i] = (selected[i].indexOf(" ") === -1)? selected[i] : selected[i].replace(/\s/gi, "%20");
     }
 
-    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/plans";
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/plans?programs=";
     console.log(selected.join(","));
     axios.get(programUrl + selected.join(","))
     .then(res => {
