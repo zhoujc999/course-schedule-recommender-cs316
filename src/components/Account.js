@@ -7,19 +7,19 @@ import Form from 'react-bootstrap/Form';
 import './stylesheets/Account.css';
 import axios from 'axios';
 
-const DUMMY_ACCOUNT_INFO = {netid: "joe24", bio: "A pasta expert"};
-const DUMMY_COMPLETED = [{name: "Culinary Arts", type: "B.A."}, {name: "Astrophysics", type: "Ph.D."}];
-// const DUMMY_SEMESTERS = [];
-const DUMMY_SEMESTERS = [
-  { sem_num: 1, courses: [ {code: "ART101", name: "Art101", taken_for: "Culinary Arts B.A."}, {code: "PASTA101", name: "Cooking101", taken_for: "Culinary Arts B.A."} ] },
-  { sem_num: 2, courses: [ {code: "PASTA102", name: "The Art of Spaghetti", taken_for: "Culinary Arts B.A."} ] },
-  { sem_num: 3, courses: [ {code: "PASTA201", name: "Macaroni Art", taken_for: "Culinary Arts B.A."} ] },
-  { sem_num: 4, courses: [ {code: "PASTA305", name: "Linguini Painting", taken_for: "Culinary Arts B.A."}, {code: "PASTA255", name: "Tortellini Sculpting", taken_for: "Culinary Arts B.A."} ] },
-  { sem_num: 5, courses: [ {code: "PASTA420", name: "Writing Orzo", taken_for: "Culinary Arts B.A."}, {code: "PASTA465", name: "Photographing Capellini", taken_for: "Culinary Arts B.A."} ] },
-];
-const DUMMY_TYPES = [{type: "B.A.", label: "B.A."}, {type: "B.S.", label: "B.S."}, {type: "Concentration", label: "Concentration"}, {type: "Ph.D.", label: "Ph.D."}, {type: "Minor", label: "Minor"}];
-const DUMMY_PROGRAMS = [{name: "Computer Science", label: "Computer Science"}, {name: "Psychology", label: "Psychology"}, {name: "Astrophysics", label: "Astrophysics"}, {name: "Culinary Arts", label: "Culinary Arts"}];
-const DUMMY_COURSES = [{code: "ART101", name: "Art101"}, {code: "PASTA102", name: "Cooking101"}, {code: "PASTA201", name: "The Art of Spaghetti"}, {code: "PASTA101", name: "Macaroni Art"}, {code: "PASTA305", name: "Linguini Painting"}, {code: "PASTA255", name: "Tortellini Sculpting"}, {code: "PASTA420", name: "Writing Orzo"}, {code: "PASTA465", name: "Photographing Capellini"}, {code: "MATH212", name: "Multivariable Calculus"}, {code: "CHEM101", name: "Intro to Chemistry"}];
+// const DUMMY_ACCOUNT_INFO = {netid: "joe24", bio: "A pasta expert"};
+// const DUMMY_COMPLETED = [{name: "Culinary Arts", type: "B.A."}, {name: "Astrophysics", type: "Ph.D."}];
+// // const DUMMY_SEMESTERS = [];
+// const DUMMY_SEMESTERS = [
+//   { sem_num: 1, courses: [ {code: "ART101", name: "Art101", taken_for: "Culinary Arts B.A."}, {code: "PASTA101", name: "Cooking101", taken_for: "Culinary Arts B.A."} ] },
+//   { sem_num: 2, courses: [ {code: "PASTA102", name: "The Art of Spaghetti", taken_for: "Culinary Arts B.A."} ] },
+//   { sem_num: 3, courses: [ {code: "PASTA201", name: "Macaroni Art", taken_for: "Culinary Arts B.A."} ] },
+//   { sem_num: 4, courses: [ {code: "PASTA305", name: "Linguini Painting", taken_for: "Culinary Arts B.A."}, {code: "PASTA255", name: "Tortellini Sculpting", taken_for: "Culinary Arts B.A."} ] },
+//   { sem_num: 5, courses: [ {code: "PASTA420", name: "Writing Orzo", taken_for: "Culinary Arts B.A."}, {code: "PASTA465", name: "Photographing Capellini", taken_for: "Culinary Arts B.A."} ] },
+// ];
+// const DUMMY_TYPES = [{type: "B.A.", label: "B.A."}, {type: "B.S.", label: "B.S."}, {type: "Concentration", label: "Concentration"}, {type: "Ph.D.", label: "Ph.D."}, {type: "Minor", label: "Minor"}];
+// const DUMMY_PROGRAMS = [{name: "Computer Science", label: "Computer Science"}, {name: "Psychology", label: "Psychology"}, {name: "Astrophysics", label: "Astrophysics"}, {name: "Culinary Arts", label: "Culinary Arts"}];
+// const DUMMY_COURSES = [{code: "ART101", name: "Art101"}, {code: "PASTA102", name: "Cooking101"}, {code: "PASTA201", name: "The Art of Spaghetti"}, {code: "PASTA101", name: "Macaroni Art"}, {code: "PASTA305", name: "Linguini Painting"}, {code: "PASTA255", name: "Tortellini Sculpting"}, {code: "PASTA420", name: "Writing Orzo"}, {code: "PASTA465", name: "Photographing Capellini"}, {code: "MATH212", name: "Multivariable Calculus"}, {code: "CHEM101", name: "Intro to Chemistry"}];
 
 class Account extends Component {
   constructor(props) {
@@ -724,10 +724,6 @@ class Account extends Component {
           this.getClassInfo().then(classRes => {
             this.getSemesters().then(semRes => {
               console.log(accountRes);
-              console.log(progRes);
-              console.log(compRes);
-              console.log(classRes);
-              console.log(semRes);
               let compFinal;
               if (compRes.length === 0) {
                 compFinal = [];
@@ -737,6 +733,7 @@ class Account extends Component {
                   return ({ name: progInfo.name, type: progInfo.type });
                 })
               }
+              console.log(accountRes);
               let semsFinal = [];
               if (semRes.length !== 0) {
                 let maxSemNum = 0;
@@ -745,7 +742,7 @@ class Account extends Component {
                     maxSemNum = semRes[i].semester_number;
                   }
                 }
-                console.log(maxSemNum);
+                console.log(accountRes);
                 for (let j = 0; j < maxSemNum; j++) {
                   let newSem = { sem_num: j+1, courses: [] };
                   semRes.filter(course => course.semester_number === j+1)
@@ -755,12 +752,11 @@ class Account extends Component {
                         code: c.classid_id,
                         taken_for: `${takenFor.name} ${takenFor.type}`
                       });
-                      console.log(newSem);
                     });
                   semsFinal.push(newSem);
-                  console.log(semsFinal);
                 }
               }
+              console.log(accountRes);
               this.setState({
                 accountInfo: {netid: accountRes.netid, bio: accountRes.description},
                 programOptions: progRes.programs,
