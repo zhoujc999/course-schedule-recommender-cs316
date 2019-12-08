@@ -23,6 +23,7 @@ class Login extends Component {
     this.state = {
       netid: '',
       password: '',
+      token: '',
       isLoggedIn: false,
       error: null
     };
@@ -41,8 +42,6 @@ class Login extends Component {
       //reset the state after successful user registration
       .then(() => {
         this.setState({
-          netid: '',
-          password: '',
           isLoggedIn: true,
           error: null
         });
@@ -50,12 +49,11 @@ class Login extends Component {
         if (this.state.isLoggedIn) {
           this.props.firebase.doRetrieveToken()
           .then((idToken) => {
-            console.log(idToken);
+            this.setState({token: idToken})
           })
           .catch(err => {
             this.setState({error: err});
           });
-
           // this.props.history.push('/account');
         }
       })
@@ -69,10 +67,10 @@ class Login extends Component {
   render() {
     const isInvalid = this.state.netid === '' || this.state.password === '';
 
-    if (this.state.isLoggedIn === true) {
+    if (this.state.isLoggedIn === true && this.state.token !== '') {
       return (
         <div>
-          <Account netid={this.state.netid}/>
+          <Account netid={this.state.netid} token={this.state.token}  />
         </div>
       )
     }
