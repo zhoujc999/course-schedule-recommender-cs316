@@ -100,6 +100,8 @@ class Account extends Component {
     console.log('updating backend');
     console.log(this.state);
 
+    updateProgramUrl =
+    axios.post()
     const { completed } = this.state;
     let canUpdate = true;
     for (let i = 0; i < completed.length; i++) {
@@ -700,12 +702,6 @@ class Account extends Component {
 
   componentDidMount() {
     //TODO: Get existing data from database, if exists and put into state
-<<<<<<< HEAD
-    this.setState({
-      accountInfo: DUMMY_ACCOUNT_INFO,
-      completed: DUMMY_COMPLETED,
-      semesters: DUMMY_SEMESTERS,
-=======
     console.log(this.props)
     this.getAccountInfo().then(accountRes => {
       this.getProgramInfo().then(progRes => {
@@ -731,7 +727,6 @@ class Account extends Component {
           })
         })
       })
->>>>>>> 04b0e93abdf60a6a2e00941e062d983a9879c687
     });
   }
 
@@ -778,8 +773,6 @@ class Account extends Component {
     });
   }
 
-<<<<<<< HEAD
-=======
   getProgramInfo() {
     const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
     return axios.get(programUrl)
