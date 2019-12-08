@@ -36,5 +36,7 @@ urlpatterns = [
     path('account', RecommenderViews.index, name='index'),
     path('api/', include(router.urls)),
     path('api/plans', RecommenderViews.PlanView.as_view()),
+    path('api/semestersbynetid', RecommenderViews.SemesterByNetidView.as_view()),
+    path('api/completedbynetid', RecommenderViews.CompletedByNetidView.as_view()),
     path('admin/', admin.site.urls),
 ]
