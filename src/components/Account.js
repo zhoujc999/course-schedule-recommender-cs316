@@ -24,6 +24,7 @@ import axios from 'axios';
 class Account extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       accountInfo: {netid: "", bio: ""}, //User ID, email, bio -> Student DB
       completed: [], //Programs completed -> Completed + Program DB
@@ -106,7 +107,6 @@ class Account extends Component {
   handleProgramUpdate() {
     //Check to make sure nothing is empty
     const { completed } = this.state;
-    console.log(this.props.token);
     let canUpdate = true;
     for (let i = 0; i < completed.length; i++) {
       if (completed[i].name.trim() === "" || completed[i].type.trim() === "") {
