@@ -68,12 +68,24 @@ class Account extends Component {
   }
 
   handleBioUpdate() {
-    //This function should be "final" confirmation of bio change
-    //TODO: Send updated info to backend
-    //TODO: Get rid of console logs
-    console.log('updating backend');
-    console.log(this.state);
-    this.setState({ bioUpdated: "SUCCESS" });
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': this.props.token
+    }
+    const postBioUrl = "https://course-schedule-recommender.herokuapp.com/api/students/";
+    axios.post(postBioUrl, {
+      netid: this.state.accountInfo.netid,
+      description: this.state.accountInfo.bio
+    },
+    {
+      headers: headers
+    })
+    .then(res => {
+      this.setState({ bioUpdated: "SUCCESS" });
+    })
+    .catch(err => {
+      this.setState({ bioUpdated: "FAILED", error: true });
+    });
   }
 
   handleProgramChange = i => selectedValue => {
@@ -316,7 +328,7 @@ class Account extends Component {
                   : {name: ''}
                 ]
               }
-              options={ this.state.programOptions }
+              options={ DUMMY_PROGRAMS }
             />
           </div>
           <div className="type_label">Type:</div>
@@ -356,7 +368,7 @@ class Account extends Component {
                   : {type: ''}
                 ]
               }
-              options={ this.state.typeOptions }
+              options={ DUMMY_TYPES }
             />
           </div>
         </div>
@@ -763,8 +775,8 @@ class Account extends Component {
   }
 
   getAccountInfo() {
-    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
-    return axios.get(`${studentURL}${this.props.netid}`)
+    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    return axios.get(studentURL)
     .then(res => {
       if (res.data.detail !== undefined) {
         return { netid: this.props.netid, bio: "" };
@@ -830,7 +842,6 @@ class Account extends Component {
 
   render() {
     const { completed, semesters } = this.state;
-    console.log(this.state)
     return (
       <div className="page_container">
         <div className="account_container">
