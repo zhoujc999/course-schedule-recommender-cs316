@@ -309,7 +309,7 @@ class Account extends Component {
               onChange={ this.handleProgramChange(i) }
               values={
                 [prog.name !== "" &&
-                this.state.programOptions.find(val => val.name === prog.name)]
+                this.state.programOptions.find(val => val.value === prog.name)]
               }
               options={ this.state.programOptions }
             />
@@ -346,7 +346,7 @@ class Account extends Component {
               onChange={ this.handleTypeChange(i) }
               values={
                 [prog.type !== "" &&
-                this.state.typeOptions.find(val => val.type === prog.type)]
+                this.state.typeOptions.find(val => val.value === prog.type)]
               }
               options={ this.state.typeOptions }
             />
