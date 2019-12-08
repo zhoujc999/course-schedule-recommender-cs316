@@ -31,7 +31,11 @@ class Account extends Component {
       bioUpdated: "INITIAL",
       progUpdated: "INITIAL",
       semsUpdated: "INITIAL",
-      error: false
+      programOptions: [],
+      typeOptions: [],
+      error: false,
+      allPrograms: [],
+      allCourses: []
     };
     this.handleBioUpdate = this.handleBioUpdate.bind(this);
     this.handleBioSubmit = this.handleBioSubmit.bind(this);
@@ -112,7 +116,7 @@ class Account extends Component {
     const { completed } = this.state;
     let canUpdate = true;
     for (let i = 0; i < completed.length; i++) {
-      if (completed[i].name === "" || completed[i].type === "") {
+      if (completed[i].name.trim() === "" || completed[i].type.trim() === "") {
         canUpdate = false;
       }
     }
@@ -162,7 +166,7 @@ class Account extends Component {
       } else {
         for (let j = 0; j < semesters[i].courses.length; j++) {
           let course = semesters[i].courses[j];
-          if (course.code === "" || course.name === "" || course.taken_for === "") {
+          if (course.code.trim() === "" || course.name.trim() === "" || course.taken_for.trim() === "") {
             canUpdate = false;
             break;
           }
@@ -307,7 +311,7 @@ class Account extends Component {
             {'If you do not see your program listed, type it in and add it'}
           </ReactTooltip>
           {
-            prog.name === "" &&
+            prog.name.trim() === "" &&
             this.renderWarningIcon("Please complete this field")
           }
           <div className="program_select">
@@ -318,11 +322,14 @@ class Account extends Component {
               valueField={"name"} //change field to key in real data
               searchBy={"name"}
               placeholder={ programPlaceholder }
-              addPlaceholder={ prog.name === "" && programPlaceholder }
+              addPlaceholder={ prog.name.trim() === "" && programPlaceholder }
               onChange={ this.handleProgramChange(i) }
               values={
-                [prog.name !== "" &&
-                DUMMY_PROGRAMS.find(val => val.name === prog.name)]
+                [prog.name.trim() !== "" &&
+                  this.state.programOptions.find(val => val.name === prog.name) !== undefined
+                  ? this.state.programOptions.find(val => val.name === prog.name)
+                  : {name: ''}
+                ]
               }
               options={ DUMMY_PROGRAMS }
             />
@@ -344,7 +351,7 @@ class Account extends Component {
             {'If you do not see your program type listed, type it in and add it'}
           </ReactTooltip>
           {
-            prog.type === "" &&
+            prog.type.trim() === "" &&
             this.renderWarningIcon("Please complete this field")
           }
           <div className="type_select">
@@ -355,11 +362,14 @@ class Account extends Component {
               valueField={"type"} //change field to key in real data
               searchBy={"type"}
               placeholder={ typePlaceholder }
-              addPlaceholder={ prog.type === "" && typePlaceholder }
+              addPlaceholder={ prog.type.trim() === "" && typePlaceholder }
               onChange={ this.handleTypeChange(i) }
               values={
-                [prog.type !== "" &&
-                DUMMY_TYPES.find(val => val.type === prog.type)]
+                [prog.type.trim() !== "" &&
+                  this.state.typeOptions.find(val => val.type === prog.type) !== undefined
+                  ? this.state.typeOptions.find(val => val.type === prog.type)
+                  : {type: ''}
+                ]
               }
               options={ DUMMY_TYPES }
             />
@@ -507,7 +517,7 @@ class Account extends Component {
             {'If you do not see your course code listed, type it in and add it'}
           </ReactTooltip>
           {
-            course.code === "" &&
+            course.code.trim() === "" &&
             this.renderWarningIcon("Please complete this field", "12px")
           }
           <div className="course_form">
@@ -517,20 +527,20 @@ class Account extends Component {
               valueField={"code"} //change field to key in real data
               searchBy={"code"}
               placeholder={ courseCodePlaceholder }
-              addPlaceholder={ course.code === "" && courseCodePlaceholder }
+              addPlaceholder={ course.code.trim() === "" && courseCodePlaceholder }
               onChange={ this.handleCourseChange(i, semester.sem_num, "code") }
               values={
-                [course.code !== "" &&
-                DUMMY_COURSES.find(val => val.code === course.code)]
+                [course.code.trim() !== "" &&
+                this.state.allCourses.find(val => val.code === course.code)]
               }
-              options={ DUMMY_COURSES }
+              options={ this.state.allCourses }
             />
           </div>
           <span className="vl" />
           <span className="course_form_label">Name: </span>
           <div className="course_form_name">
-            {DUMMY_COURSES.find(val => val.code === course.code) !== undefined
-              ? DUMMY_COURSES.find(val => val.code === course.code).name
+            {this.state.allCourses.find(val => val.code === course.code) !== undefined
+              ? this.state.allCourses.find(val => val.code === course.code).name
               : ""
             }
           </div>
@@ -550,7 +560,7 @@ class Account extends Component {
             {"Why you took this course/for what requirement"}
           </ReactTooltip>
           {
-            course.taken_for === "" &&
+            course.taken_for.trim() === "" &&
             this.renderWarningIcon("Please complete this field", "12px")
           }
           <div className="course_form">
@@ -560,10 +570,10 @@ class Account extends Component {
               valueField={"taken_for"} //change field to key in real data
               searchBy={"taken_for"}
               placeholder={ coursePurposePlaceholder }
-              addPlaceholder={ course.taken_for === "" && coursePurposePlaceholder }
+              addPlaceholder={ course.taken_for.trim() === "" && coursePurposePlaceholder }
               onChange={ this.handleCourseChange(i, semester.sem_num, "taken_for") }
               values={
-                [course.taken_for !== "" &&
+                [course.taken_for.trim() !== "" &&
                 taken_options.find(val =>
                   val.taken_for === course.taken_for
                 ) !== undefined ? taken_options.find(val => val.taken_for === course.taken_for)
@@ -713,24 +723,54 @@ class Account extends Component {
     this.getAccountInfo().then(accountRes => {
       this.getProgramInfo().then(progRes => {
         this.getCompleted().then(compRes => {
-          console.log(accountRes);
-          console.log(progRes);
-          console.log(compRes);
-          let compFinal;
-          if (compRes.length === 0) {
-            compFinal = [];
-          } else {
-            compFinal = compRes.map(obj => {
-              let progInfo = progRes.allPrograms.find(p => p.pid === obj.pid_id)
-              return ({name: progInfo.name, type: progInfo.type});
+          this.getClassInfo().then(classRes => {
+            this.getSemesters().then(semRes => {
+              console.log(accountRes);
+              console.log(progRes);
+              console.log(compRes);
+              console.log(classRes);
+              console.log(semRes);
+              let compFinal, semsFinal;
+              if (compRes.length === 0) {
+                compFinal = [];
+              } else {
+                compFinal = compRes.map(obj => {
+                  let progInfo = progRes.allPrograms.find(p => p.pid === obj.pid_id)
+                  return ({ name: progInfo.name, type: progInfo.type });
+                })
+              }
+              if (semRes.length === 0) {
+                semsFinal = [];
+              } else {
+                let maxSemNum = 0;
+                for (let i = 0; i < semRes.length; i++){
+                  if (semRes[i].semester_number > maxSemNum) {
+                    maxSemNum = semRes[i].semester_number;
+                  }
+                }
+                for (let j = 0; j < maxSemNum; j++) {
+                  let newSem = { semNum: j+1, courses: [] };
+                  semRes.filter(course => course.semester_number === j)
+                    .forEach(c => {
+                      let takenFor = progRes.allPrograms.find(p => p.pid === c.pid_id);
+                      newSem.courses.push({
+                        code: c.classid_id,
+                        taken_for: `${takenFor.name} ${takenFor.type}`
+                      });
+                    });
+                  semsFinal.push(newSem);
+                }
+              }
+              this.setState({
+                accountInfo: {netid: accountRes.netid, bio: accountRes.description},
+                programOptions: progRes.programs,
+                typeOptions: progRes.types,
+                completed: compFinal,
+                semesters: semsFinal,
+                allPrograms: progRes.allPrograms,
+                allCourses: classRes
+              })
             })
-          }
-          this.setState({
-            accountInfo: {netid: accountRes.netid, bio: accountRes.description},
-            programOptions: progRes.programs,
-            typeOptions: progRes.types,
-            completed: compFinal,
-            semesters: DUMMY_SEMESTERS
           })
         })
       })
@@ -742,7 +782,7 @@ class Account extends Component {
     return axios.get(studentURL)
     .then(res => {
       if (res.data.detail !== undefined) {
-        return {netid: this.props.netid, bio: ""};
+        return { netid: this.props.netid, bio: "" };
       }
       else {
         return res.data;
@@ -765,15 +805,10 @@ class Account extends Component {
   }
 
   getSemesters() {
-    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
-    return axios.get(`${studentURL}${this.props.netid}`)
+    const semesterURL = "https://course-schedule-recommender.herokuapp.com/api/semestersbynetid?netid=";
+    return axios.get(`${semesterURL}${this.props.netid}`)
     .then(res => {
-      if (res.data.detail !== undefined) {
-        return {netid: this.props.netid, bio: ""};
-      }
-      else {
-        return res.data;
-      }
+      return res.data;
     })
     .catch(err => {
       this.setState({error: err});
@@ -788,9 +823,9 @@ class Account extends Component {
       const types = [...new Set(res.data.map(val => val.type))];
       programs.sort();
       types.sort();
-      const pMap = programs.map(p => ({name: p, label: p}));
-      const tMap = types.map(t => ({type: t, label: t}));
-      return {programs: pMap, types: tMap, allPrograms: res.data};
+      const pMap = programs.map(p => ({ name: p, label: p }));
+      const tMap = types.map(t => ({ type: t, label: t }));
+      return { programs: pMap, types: tMap, allPrograms: res.data };
     })
     .catch(err => {
       this.setState({error: err});
@@ -798,16 +833,10 @@ class Account extends Component {
   }
 
   getClassInfo() {
-    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
-    return axios.get(programUrl)
+    const classURL = "https://course-schedule-recommender.herokuapp.com/api/classes/";
+    return axios.get(`${classURL}${this.props.netid}`)
     .then(res => {
-      const programs = [...new Set(res.data.map(val => val.name))];
-      const types = [...new Set(res.data.map(val => val.type))];
-      programs.sort();
-      types.sort();
-      const pMap = programs.map(p => ({name: p, label: p}));
-      const tMap = types.map(t => ({type: t, label: t}));
-      return {programs: pMap, types: tMap};
+      return res.data.map(c => ({ code: c.classid, name: c.name }));
     })
     .catch(err => {
       this.setState({error: err});
