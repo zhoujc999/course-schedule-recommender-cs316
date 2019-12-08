@@ -700,7 +700,7 @@ class Account extends Component {
         accountInfo: {netid: accountRes.netid, bio: accountRes.description},
         completed: DUMMY_COMPLETED,
         semesters: DUMMY_SEMESTERS
-      });
+      })
     );
   }
 
