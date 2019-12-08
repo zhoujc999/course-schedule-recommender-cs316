@@ -700,10 +700,38 @@ class Account extends Component {
 
   componentDidMount() {
     //TODO: Get existing data from database, if exists and put into state
+<<<<<<< HEAD
     this.setState({
       accountInfo: DUMMY_ACCOUNT_INFO,
       completed: DUMMY_COMPLETED,
       semesters: DUMMY_SEMESTERS,
+=======
+    console.log(this.props)
+    this.getAccountInfo().then(accountRes => {
+      this.getProgramInfo().then(progRes => {
+        this.getCompleted().then(compRes => {
+          console.log(accountRes);
+          console.log(progRes);
+          console.log(compRes);
+          let compFinal;
+          if (compRes.length === 0) {
+            compFinal = [];
+          } else {
+            compFinal = compRes.map(obj => {
+              let progInfo = progRes.allPrograms.find(p => p.pid === obj.pid_id)
+              return ({name: progInfo.name, type: progInfo.type});
+            })
+          }
+          this.setState({
+            accountInfo: {netid: accountRes.netid, bio: accountRes.description},
+            programOptions: progRes.programs,
+            typeOptions: progRes.types,
+            completed: compFinal,
+            semesters: DUMMY_SEMESTERS
+          })
+        })
+      })
+>>>>>>> 04b0e93abdf60a6a2e00941e062d983a9879c687
     });
   }
 
@@ -711,13 +739,82 @@ class Account extends Component {
     const studentURL = "https://course-schedule-recommender.herokuapp.com/api/programs/";
     return axios.get(studentURL)
     .then(res => {
-      return res;
+      if (res.data.detail !== undefined) {
+        return {netid: this.props.netid, bio: ""};
+      }
+      else {
+        return res.data;
+      }
     })
     .catch(err => {
       this.setState({error: err});
     });
   }
 
+  getCompleted() {
+    const completedURL = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=";
+    return axios.get(`${completedURL}${this.props.netid}`)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+  getSemesters() {
+    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
+    return axios.get(`${studentURL}${this.props.netid}`)
+    .then(res => {
+      if (res.data.detail !== undefined) {
+        return {netid: this.props.netid, bio: ""};
+      }
+      else {
+        return res.data;
+      }
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+<<<<<<< HEAD
+=======
+  getProgramInfo() {
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    return axios.get(programUrl)
+    .then(res => {
+      const programs = [...new Set(res.data.map(val => val.name))];
+      const types = [...new Set(res.data.map(val => val.type))];
+      programs.sort();
+      types.sort();
+      const pMap = programs.map(p => ({name: p, label: p}));
+      const tMap = types.map(t => ({type: t, label: t}));
+      return {programs: pMap, types: tMap, allPrograms: res.data};
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+  getClassInfo() {
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    return axios.get(programUrl)
+    .then(res => {
+      const programs = [...new Set(res.data.map(val => val.name))];
+      const types = [...new Set(res.data.map(val => val.type))];
+      programs.sort();
+      types.sort();
+      const pMap = programs.map(p => ({name: p, label: p}));
+      const tMap = types.map(t => ({type: t, label: t}));
+      return {programs: pMap, types: tMap};
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+>>>>>>> 04b0e93abdf60a6a2e00941e062d983a9879c687
   render() {
     const { completed, semesters } = this.state;
     return (
