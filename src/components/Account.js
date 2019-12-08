@@ -727,14 +727,12 @@ class Account extends Component {
   // }
 
   componentDidMount() {
-    //TODO: Get existing data from database, if exists and put into state
-    console.log(this.props)
+    // console.log(this.props)
     this.getAccountInfo().then(accountRes => {
       this.getProgramInfo().then(progRes => {
         this.getCompleted().then(compRes => {
           this.getClassInfo().then(classRes => {
             this.getSemesters().then(semRes => {
-              console.log(accountRes);
               let compFinal;
               if (compRes.length === 0) {
                 compFinal = [];
@@ -744,7 +742,6 @@ class Account extends Component {
                   return ({ name: progInfo.name, type: progInfo.type });
                 })
               }
-              console.log(accountRes);
               let semsFinal = [];
               if (semRes.length !== 0) {
                 let maxSemNum = 0;
@@ -753,7 +750,6 @@ class Account extends Component {
                     maxSemNum = semRes[i].semester_number;
                   }
                 }
-                console.log(accountRes);
                 for (let j = 0; j < maxSemNum; j++) {
                   let newSem = { sem_num: j+1, courses: [] };
                   semRes.filter(course => course.semester_number === j+1)
@@ -767,7 +763,6 @@ class Account extends Component {
                   semsFinal.push(newSem);
                 }
               }
-              console.log(accountRes);
               this.setState({
                 accountInfo: {netid: accountRes.netid, bio: accountRes.description},
                 programOptions: progRes.programs,
@@ -786,7 +781,7 @@ class Account extends Component {
   }
 
   getAccountInfo() {
-    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
     return axios.get(studentURL)
     .then(res => {
       if (res.data.detail !== undefined) {
