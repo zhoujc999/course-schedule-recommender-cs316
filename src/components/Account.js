@@ -745,6 +745,7 @@ class Account extends Component {
                     maxSemNum = semRes[i].semester_number;
                   }
                 }
+                console.log(maxSemNum);
                 for (let j = 0; j < maxSemNum; j++) {
                   let newSem = { semNum: j+1, courses: [] };
                   semRes.filter(course => course.semester_number === j)
@@ -754,8 +755,10 @@ class Account extends Component {
                         code: c.classid_id,
                         taken_for: `${takenFor.name} ${takenFor.type}`
                       });
+                      console.log(newSem);
                     });
                   semsFinal.push(newSem);
+                  console.log(semsFinal);
                 }
               }
               this.setState({
