@@ -695,7 +695,7 @@ class Account extends Component {
   componentDidMount() {
     //TODO: Get existing data from database, if exists and put into state
     console.log(this.props)
-    getAccountInfo().then(accountRes =>
+    this.getAccountInfo().then(accountRes =>
       this.setState({
         accountInfo: {netid: accountRes.netid, bio: accountRes.description},
         completed: DUMMY_COMPLETED,
