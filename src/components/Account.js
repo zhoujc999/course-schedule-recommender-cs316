@@ -71,7 +71,7 @@ class Account extends Component {
   handleBioUpdate() {
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': this.props.token
+      'Authorization': 'FirebaseToken '+ this.props.token
     }
     const postBioUrl = "https://course-schedule-recommender.herokuapp.com/api/students/";
     axios.post(postBioUrl, {
@@ -104,13 +104,7 @@ class Account extends Component {
   }
 
   handleProgramUpdate() {
-    //This function should be "final" confirmation of program change
-    //TODO: Send updated info to backend
     //Check to make sure nothing is empty
-    //TODO: Get rid of console logs
-    console.log('updating backend');
-    console.log(this.state);
-
     const { completed } = this.state;
     let canUpdate = true;
     for (let i = 0; i < completed.length; i++) {
@@ -118,10 +112,27 @@ class Account extends Component {
         canUpdate = false;
       }
     }
-    if (canUpdate === true) {
-      this.setState({ progUpdated: "SUCCESS" }); //TODO: UPDATE BACKEND/DB
-    } else {
-      this.setState({ progUpdated: "FAILED" });
+
+    //send post request to backend if completed programs are not empty
+    if (canUpdate) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'FirebaseToken '+ this.props.token
+      }
+      const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=" + this.props.netid;
+      axios.post(updateProgramUrl, {
+        netid: this.state.accountInfo.netid,
+        completed: this.state.completed
+      },
+      {
+        headers: headers
+      })
+      .then(res => {
+        this.setState({ progUpdated: "SUCCESS" });
+      })
+      .catch(err => {
+        this.setState({ progUpdated: "FAILED", error: true });
+      });
     }
   }
 

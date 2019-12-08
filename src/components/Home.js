@@ -72,7 +72,7 @@ class Home extends Component {
   getPlans() {
     const selected = this.state.selected.map(p => p.value);
     for (let i = 0; i < selected.length; i++) {
-      selected[i] = (selected[i].indexOf(" ") === -1)? selected[i] : selected[i].replace(" ", "%20");
+      selected[i] = (selected[i].indexOf(" ") === -1)? selected[i] : selected[i].replace(/\s/gi, "%20");
     }
 
     const programUrl = "https://course-schedule-recommender.herokuapp.com/api/plans";
