@@ -854,14 +854,7 @@ class Account extends Component {
       return (
         <div>
           Loading...
-          <div class="sk-chase">
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-          </div>
+           <div className="loader"></div> 
         </div>
       );
     }
