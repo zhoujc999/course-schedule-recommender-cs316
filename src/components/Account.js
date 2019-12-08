@@ -31,6 +31,7 @@ class Account extends Component {
       bioUpdated: "INITIAL",
       progUpdated: "INITIAL",
       semsUpdated: "INITIAL",
+      programOptions: [],
       error: false
     };
     this.handleBioUpdate = this.handleBioUpdate.bind(this);
@@ -307,9 +308,9 @@ class Account extends Component {
               onChange={ this.handleProgramChange(i) }
               values={
                 [prog.name !== "" &&
-                DUMMY_PROGRAMS.find(val => val.name === prog.name)]
+                this.state.programOptions.find(val => val.name === prog.name)]
               }
-              options={ DUMMY_PROGRAMS }
+              options={ this.state.programOptions }
             />
           </div>
           <div className="type_label">Type:</div>
@@ -344,9 +345,9 @@ class Account extends Component {
               onChange={ this.handleTypeChange(i) }
               values={
                 [prog.type !== "" &&
-                DUMMY_TYPES.find(val => val.type === prog.type)]
+                this.state.typeOptions.find(val => val.type === prog.type)]
               }
-              options={ DUMMY_TYPES }
+              options={ this.state.typeOptions }
             />
           </div>
         </div>
@@ -696,11 +697,16 @@ class Account extends Component {
     //TODO: Get existing data from database, if exists and put into state
     console.log(this.props)
     this.getAccountInfo().then(accountRes => {
-      console.log(accountRes)
-      this.setState({
-        accountInfo: {netid: accountRes.data.netid, bio: accountRes.data.description},
-        completed: DUMMY_COMPLETED,
-        semesters: DUMMY_SEMESTERS
+      this.getProgramInfo().then(progRes => {
+        console.log(accountRes);
+        console.log(progRes);
+        this.setState({
+          accountInfo: {netid: accountRes.data.netid, bio: accountRes.data.description},
+          programOptions: progRes.data.programs,
+          typeOptions: progRes.data.types,
+          completed: DUMMY_COMPLETED,
+          semesters: DUMMY_SEMESTERS
+        })
       })
     });
   }
@@ -710,6 +716,23 @@ class Account extends Component {
     return axios.get(`${studentURL}${this.props.netid}`)
     .then(res => {
       return res;
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+  getProgramInfo() {
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    return axios.get(programUrl)
+    .then(res => {
+      const programs = [...new Set(res.data.map(val => val.name))];
+      const types = [...new Set(res.data.map(val => val.type))];
+      programs.sort();
+      types.sort();
+      pMap = programs.map(p => ({value: p, label: p}));
+      tMap = types.map(t => ({value: t, label: t}));
+      return {programs: pMap, types: tMap};
     })
     .catch(err => {
       this.setState({error: err});
