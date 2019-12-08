@@ -748,7 +748,7 @@ class Account extends Component {
                 console.log(maxSemNum);
                 for (let j = 0; j < maxSemNum; j++) {
                   let newSem = { semNum: j+1, courses: [] };
-                  semRes.filter(course => course.semester_number === j)
+                  semRes.filter(course => course.semester_number === j+1)
                     .forEach(c => {
                       let takenFor = progRes.allPrograms.find(p => p.pid === c.pid_id);
                       newSem.courses.push({
