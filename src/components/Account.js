@@ -695,13 +695,14 @@ class Account extends Component {
   componentDidMount() {
     //TODO: Get existing data from database, if exists and put into state
     console.log(this.props)
-    this.getAccountInfo().then(accountRes =>
+    this.getAccountInfo().then(accountRes => {
+      console.log(accountRes)
       this.setState({
-        accountInfo: {netid: accountRes.netid, bio: accountRes.description},
+        accountInfo: {netid: accountRes.data.netid, bio: accountRes.data.description},
         completed: DUMMY_COMPLETED,
         semesters: DUMMY_SEMESTERS
       })
-    );
+    });
   }
 
   getAccountInfo() {
