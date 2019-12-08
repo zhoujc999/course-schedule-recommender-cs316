@@ -31,6 +31,8 @@ class Account extends Component {
       bioUpdated: "INITIAL",
       progUpdated: "INITIAL",
       semsUpdated: "INITIAL",
+      programOptions: [],
+      typeOptions: [],
       error: false
     };
     this.handleBioUpdate = this.handleBioUpdate.bind(this);
@@ -307,9 +309,12 @@ class Account extends Component {
               onChange={ this.handleProgramChange(i) }
               values={
                 [prog.name !== "" &&
-                DUMMY_PROGRAMS.find(val => val.name === prog.name)]
+                  this.state.programOptions.find(val => val.name === prog.name) !== undefined
+                  ? this.state.programOptions.find(val => val.name === prog.name)
+                  : {name: ''}
+                ]
               }
-              options={ DUMMY_PROGRAMS }
+              options={ this.state.programOptions }
             />
           </div>
           <div className="type_label">Type:</div>
@@ -344,9 +349,12 @@ class Account extends Component {
               onChange={ this.handleTypeChange(i) }
               values={
                 [prog.type !== "" &&
-                DUMMY_TYPES.find(val => val.type === prog.type)]
+                  this.state.typeOptions.find(val => val.type === prog.type) !== undefined
+                  ? this.state.typeOptions.find(val => val.type === prog.type)
+                  : {type: ''}
+                ]
               }
-              options={ DUMMY_TYPES }
+              options={ this.state.typeOptions }
             />
           </div>
         </div>
@@ -694,16 +702,25 @@ class Account extends Component {
 
   componentDidMount() {
     //TODO: Get existing data from database, if exists and put into state
-    this.setState({
-      accountInfo: DUMMY_ACCOUNT_INFO,
-      completed: DUMMY_COMPLETED,
-      semesters: DUMMY_SEMESTERS,
+    console.log(this.props)
+    this.getAccountInfo().then(accountRes => {
+      this.getProgramInfo().then(progRes => {
+        console.log(accountRes);
+        console.log(progRes);
+        this.setState({
+          accountInfo: {netid: accountRes.data.netid, bio: accountRes.data.description},
+          programOptions: progRes.programs,
+          typeOptions: progRes.types,
+          completed: DUMMY_COMPLETED,
+          semesters: DUMMY_SEMESTERS
+        })
+      })
     });
   }
 
   getAccountInfo() {
-    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/programs/";
-    return axios.get(studentURL)
+    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
+    return axios.get(`${studentURL}${this.props.netid}`)
     .then(res => {
       return res;
     })
@@ -712,8 +729,26 @@ class Account extends Component {
     });
   }
 
+  getProgramInfo() {
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    return axios.get(programUrl)
+    .then(res => {
+      const programs = [...new Set(res.data.map(val => val.name))];
+      const types = [...new Set(res.data.map(val => val.type))];
+      programs.sort();
+      types.sort();
+      const pMap = programs.map(p => ({name: p, label: p}));
+      const tMap = types.map(t => ({type: t, label: t}));
+      return {programs: pMap, types: tMap};
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
   render() {
     const { completed, semesters } = this.state;
+    console.log(this.state)
     return (
       <div className="page_container">
         <div className="account_container">
