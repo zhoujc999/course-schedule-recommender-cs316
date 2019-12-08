@@ -730,8 +730,8 @@ class Account extends Component {
       const types = [...new Set(res.data.map(val => val.type))];
       programs.sort();
       types.sort();
-      pMap = programs.map(p => ({value: p, label: p}));
-      tMap = types.map(t => ({value: t, label: t}));
+      const pMap = programs.map(p => ({value: p, label: p}));
+      const tMap = types.map(t => ({value: t, label: t}));
       return {programs: pMap, types: tMap};
     })
     .catch(err => {
