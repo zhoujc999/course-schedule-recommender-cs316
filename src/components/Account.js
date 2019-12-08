@@ -115,6 +115,7 @@ class Account extends Component {
 
     //send post request to backend if completed programs are not empty
     if (canUpdate) {
+      console.log(this.props.token);
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': 'FirebaseToken '+ this.props.token
@@ -854,7 +855,7 @@ class Account extends Component {
       return (
         <div>
           Loading...
-           <div className="loader"></div> 
+           <div className="loader"></div>
         </div>
       );
     }
