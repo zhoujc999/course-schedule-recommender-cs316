@@ -35,7 +35,8 @@ class Account extends Component {
       typeOptions: [],
       error: false,
       allPrograms: [],
-      allCourses: []
+      allCourses: [],
+      loading: "INITIAL"
     };
     this.handleBioUpdate = this.handleBioUpdate.bind(this);
     this.handleBioSubmit = this.handleBioSubmit.bind(this);
@@ -767,7 +768,8 @@ class Account extends Component {
                 completed: compFinal,
                 semesters: semsFinal,
                 allPrograms: progRes.allPrograms,
-                allCourses: classRes
+                allCourses: classRes,
+                loading: "SUCCESS"
               })
             })
           })
@@ -843,9 +845,9 @@ class Account extends Component {
   }
 
   render() {
-    const { completed, semesters, allCourses } = this.state;
+    const { completed, semesters, loading } = this.state;
     console.log(this.state)
-    if (allCourses.length === 0) {
+    if (loading !== "SUCCESS") {
       return (
         <div>
           Loading...
