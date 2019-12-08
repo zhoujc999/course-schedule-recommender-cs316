@@ -32,6 +32,7 @@ class Account extends Component {
       progUpdated: "INITIAL",
       semsUpdated: "INITIAL",
       programOptions: [],
+      typeOptions: [],
       error: false
     };
     this.handleBioUpdate = this.handleBioUpdate.bind(this);
