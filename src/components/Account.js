@@ -705,14 +705,26 @@ class Account extends Component {
     console.log(this.props)
     this.getAccountInfo().then(accountRes => {
       this.getProgramInfo().then(progRes => {
-        console.log(accountRes);
-        console.log(progRes);
-        this.setState({
-          accountInfo: {netid: accountRes.data.netid, bio: accountRes.data.description},
-          programOptions: progRes.programs,
-          typeOptions: progRes.types,
-          completed: DUMMY_COMPLETED,
-          semesters: DUMMY_SEMESTERS
+        this.getCompleted().then(compRes => {
+          console.log(accountRes);
+          console.log(progRes);
+          console.log(compRes);
+          let comp;
+          if (compRes.length === 0) {
+            comp = [];
+          } else {
+            comp = compRes.map(obj => {
+              progInfo = progRes.allPrograms.find(p => p.pid === obj.pid_id)
+              return ({name: progInfo.name, type: progInfo.type});
+            })
+          }
+          this.setState({
+            accountInfo: {netid: accountRes.netid, bio: accountRes.description},
+            programOptions: progRes.programs,
+            typeOptions: progRes.types,
+            completed: compRes,
+            semesters: DUMMY_SEMESTERS
+          })
         })
       })
     });
@@ -722,7 +734,39 @@ class Account extends Component {
     const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
     return axios.get(`${studentURL}${this.props.netid}`)
     .then(res => {
-      return res;
+      if (res.data.detail !== undefined) {
+        return {netid: this.props.netid, bio: ""};
+      }
+      else {
+        return res.data;
+      }
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+  getCompleted() {
+    const completedURL = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=";
+    return axios.get(`${completedURL}${this.props.netid}`)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+  getSemesters() {
+    const studentURL = "https://course-schedule-recommender.herokuapp.com/api/students/";
+    return axios.get(`${studentURL}${this.props.netid}`)
+    .then(res => {
+      if (res.data.detail !== undefined) {
+        return {netid: this.props.netid, bio: ""};
+      }
+      else {
+        return res.data;
+      }
     })
     .catch(err => {
       this.setState({error: err});
@@ -730,6 +774,23 @@ class Account extends Component {
   }
 
   getProgramInfo() {
+    const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
+    return axios.get(programUrl)
+    .then(res => {
+      const programs = [...new Set(res.data.map(val => val.name))];
+      const types = [...new Set(res.data.map(val => val.type))];
+      programs.sort();
+      types.sort();
+      const pMap = programs.map(p => ({name: p, label: p}));
+      const tMap = types.map(t => ({type: t, label: t}));
+      return {programs: pMap, types: tMap, allPrograms: res.data};
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+  getClassInfo() {
     const programUrl = "https://course-schedule-recommender.herokuapp.com/api/programs/";
     return axios.get(programUrl)
     .then(res => {
