@@ -135,7 +135,6 @@ REST_FRAMEWORK = {
 	),
     'DEFAULT_PERMISSION_CLASSES': (
         'recommender.permissions.ReadPermission',
-        'rest_framework.permissions.AllowAny',
     ),
 }
 
