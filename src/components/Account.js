@@ -74,10 +74,12 @@ class Account extends Component {
       'Content-Type': 'application/json',
       'Authorization': 'FirebaseToken '+ this.props.token
     }
-    const postBioUrl = "https://course-schedule-recommender.herokuapp.com/api/students/";
+    const netid = this.state.accountInfo.netid;
+    const description = this.state.accountInfo.bio;
+    const postBioUrl = "https://course-schedule-recommender.herokuapp.com/api/students/" + netid;
     axios.put(postBioUrl, {
-      netid: this.state.accountInfo.netid,
-      description: this.state.accountInfo.bio
+      netid: netid,
+      description: description
     },
     {
       headers: headers
