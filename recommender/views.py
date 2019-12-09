@@ -102,17 +102,20 @@ class PlanView(views.APIView):
         for net_id in netid_list:
             person_dict = dict()
             person_dict['netid'] = net_id
-            person_dict['Description'] = model_to_dict(Student.objects.get(netid=net_id))['description']
-
+            person_dict['description'] = model_to_dict(Student.objects.get(netid=net_id))['description']
+            taken_pid_set = set()
             person_semesters = dict()
 
             for s in Semester.objects.filter(netid_id=net_id).values():
                 taken_pid = s['pid_id']
                 person_semesters.setdefault(s['semester_number'],[])
                 class_info = model_to_dict(Class.objects.get(classid=s['classid_id']))
-                class_info['taken_pid'] =  taken_pid
-                class_info['taken_program'] = model_to_dict(Program.objects.get(pid=taken_pid))
+                class_info['taken_pid'] = taken_pid
+                taken_program = model_to_dict(Program.objects.get(pid=taken_pid))
+                class_info['taken_program'] = taken_program
+                taken_pid_set.add(taken_pid)
                 person_semesters[s['semester_number']].append(class_info)
+            person_dict['plan_info'] = list(Program.objects.filter(pid__in=taken_pid_set).values())
             person_dict['semesters'] = person_semesters
             plan_list.append(person_dict)
 
