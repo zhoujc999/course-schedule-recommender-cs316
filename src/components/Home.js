@@ -82,7 +82,7 @@ class Home extends Component {
       console.log(res.data);
       return res.data.map(plan => ({
         user: plan.netid,
-        description: plan.Description,
+        description: plan.description,
         planInfo: {
           //TODO: change the attribute based on the actual response body
           programs: plan.plan_info.map(val => ({name: val.name, type: val.type}))
