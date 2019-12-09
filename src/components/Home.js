@@ -85,7 +85,7 @@ class Home extends Component {
         description: plan.Description,
         planInfo: {
           //TODO: change the attribute based on the actual response body
-          programs: plan.programs.map(val => ({name: val.name, type: val.type}))
+          programs: plan.plan_info.map(val => ({name: val.name, type: val.type}))
         },
         semesters: plan.semesters
       }));
