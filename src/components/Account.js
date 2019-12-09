@@ -76,7 +76,7 @@ class Account extends Component {
     }
     const netid = this.state.accountInfo.netid;
     const description = this.state.accountInfo.bio;
-    const postBioUrl = "https://course-schedule-recommender.herokuapp.com/api/students/" + netid;
+    const postBioUrl = "https://course-schedule-recommender.herokuapp.com/api/students/" + netid + "/";
     axios.put(postBioUrl, {
       netid: netid,
       description: description
@@ -123,7 +123,7 @@ class Account extends Component {
         'Authorization': 'FirebaseToken '+ this.props.token
       }
       const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=" + this.props.netid;
-      axios.post(updateProgramUrl, {
+      axios.put(updateProgramUrl, {
         netid: this.state.accountInfo.netid,
         completed: this.state.completed
       },

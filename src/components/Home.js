@@ -79,6 +79,7 @@ class Home extends Component {
     console.log(planUrl+selected.join(","));
     axios.get(planUrl + selected.join(","))
     .then(res => {
+      console.log(res.data);
       return res.data.map(plan => ({
         user: plan.netid,
         description: plan.Description,
