@@ -80,7 +80,7 @@ class Home extends Component {
     axios.get(planUrl + selected.join(","))
     .then(res => {
       console.log(res.data);
-      return res.data.map(plan => ({
+      const arr = res.data.map(plan => ({
         user: plan.netid,
         description: plan.description,
         planInfo: {
@@ -89,6 +89,8 @@ class Home extends Component {
         },
         semesters: plan.semesters
       }));
+      console.log(arr);
+      return arr;
     })
     .catch(err => {
       this.setState({error: err});
