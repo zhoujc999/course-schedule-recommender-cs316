@@ -28,13 +28,11 @@ import json
 
 index = never_cache(TemplateView.as_view(template_name='index.html'))
 
-class ProgramView(viewsets.ModelViewSet):
-    permission_classes = (ReadPermission,)
+class ProgramView(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProgramSerializer
     queryset = Program.objects.all()
 
-class ClassView(viewsets.ModelViewSet):
-    permission_classes = (ReadPermission,)
+class ClassView(viewsets.ReadOnlyModelViewSet):
     serializer_class = ClassSerializer
     queryset = Class.objects.all()
 
@@ -116,10 +114,8 @@ class SemesterByNetidView(views.APIView):
                                 status=status.HTTP_400_BAD_REQUEST, safe=False)
         return JsonResponse({"id": semester.pk}, status=status.HTTP_201_CREATED, safe=False)
 
-
-
 class CompletedByNetidView(views.APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (ReadPermission,)
     def get(self, request, format=None):
         student_netid = request.GET.get('netid')
         program_name = request.GET.get('name')
@@ -169,32 +165,6 @@ class CompletedByNetidView(views.APIView):
             return JsonResponse({"detail": "Duplicate completed entry."},
                                 status=status.HTTP_400_BAD_REQUEST, safe=False)
         return JsonResponse({"id": completed.pk}, status=status.HTTP_201_CREATED, safe=False)
-
-    #  def put(self, request, format=None):
-        #  request_dict = json.loads(request.body)
-        #  student_netid = request_dict.get('netid')
-        #  program_name = request_dict.get('name')
-        #  program_type = request_dict.get('type')
-        #  try:
-            #  program_instance = Program.objects.get(name=program_name,
-                                                   #  type=program_type)
-        #  except Program.DoesNotExist:
-            #  return JsonResponse({"detail": "No program with name and type found."},
-                                #  status=status.HTTP_400_BAD_REQUEST, safe=False)
-        #  program_pid = model_to_dict(program_instance)["pid"]
-        #  try:
-            #  completed_instance = Completed.objects.get(netid=student_netid,
-                                                      #  pid=program_pid)
-        #  except Completed.DoesNotExist:
-            #  return JsonResponse({"detail": "No completed with netid and pid found."},
-                                #  status=status.HTTP_400_BAD_REQUEST, safe=False)
-        #  completed_id = model_to_dict(completed_instance)["id"]
-        #  program_instance = Program.objects.get(pid=program_pid)
-        #  student_instance = Student.objects.get(netid=student_netid)
-        #  completed = Completed(id=completed_id, netid=student_instance, pid=program_instance)
-        #  completed.save()
-        #  return JsonResponse({""}, status=status.HTTP_202_ACCEPTED, safe=False)
-
 
 class PlanView(views.APIView):
     permission_classes = (ReadPermission,)

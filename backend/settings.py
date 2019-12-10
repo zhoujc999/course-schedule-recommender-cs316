@@ -58,8 +58,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'slash_middleware.AppendOrRemoveSlashMiddleware',
-    'put_middleware.PutParsingMiddleware',
-    'put_middleware.JSONParsingMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
