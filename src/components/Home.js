@@ -80,10 +80,10 @@ class Home extends Component {
     return axios.get(planUrl + selected.join(","))
     .then(res => {
       const arr = res.data.map(plan => ({
-        user: 5,
-        description: plan.description,
         planInfo: {
-          programs: plan.plan_info.map(val => ({name: val.name, type: val.type}))
+        	user: plan.netid,
+        	description: plan.description,
+         	programs: plan.plan_info.map(val => ({name: val.name, type: val.type}))
         },
         semesters: plan.semesters
       }));
