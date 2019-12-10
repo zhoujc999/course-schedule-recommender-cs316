@@ -27,6 +27,7 @@ class Account extends Component {
     this.state = {
       accountInfo: {netid: "", bio: ""}, //User ID, email, bio -> Student DB
       completed: [], //Programs completed -> Completed + Program DB
+      completedOriginal: [], // save the original programs completed
       semesters: [], //Sems of classes completed -> Semester + Class DB
       bioUpdated: "INITIAL",
       progUpdated: "INITIAL",
@@ -121,29 +122,37 @@ class Account extends Component {
         'Content-Type': 'application/json',
         'Authorization': 'FirebaseToken '+ this.props.token
       }
-      this.getPidInfo(completed)
-      .then(res => {
-        console.log(res);
-        const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=" + this.props.netid;
-        const payload = res.map(p => ({netid_id: this.props.netid, pid_id: p.pid}));
-        console.log(payload);
 
-        axios.post(updateProgramUrl, {
-          payload
-        },
-        {
-          headers: headers
+      const selectedPrograms = this.state.completed;
+      const originalPrograms = this.state.completedOriginal;
+      const newPrograms = selectedPrograms.filter(p => !originalPrograms.includes(p));
+      const oldPrograms = originalPrograms.filter(p => !selectedPrograms.includes(p));
+      //need to create new entries, POST to completeds
+      newPrograms.forEach(p => {
+        this.createNewProgram(p, headers);
+      })
+
+      this.getCompleted()
+      .then(res => {
+        //list of ids to be deleted from completeds
+        oldPrograms.forEach(p => {
+          const deletedId = res.find(completed => (completed.name === p.name && completed.type === p.type)).id;
+          this.deleteCompleted(deletedId, headers);
         })
-        .then(res => {
-          this.setState({ progUpdated: "SUCCESS" });
-        })
-        .catch(err => {
-          this.setState({ progUpdated: "FAILED", error: true });
-        });
       })
       .catch(err => {
         this.setState({error: err});
-      });
+      })
+
+      // this.getPidInfo(completed)
+      // .then(res => {
+      //   const netidWithIds = res.map(p => ({netid_id: this.props.netid, pid_id: p.pid}));
+      //   //need to delete old entries, DELETE from completeds/id
+      //   //to get ids GET from completeds/id
+      // })
+      // .catch(err => {
+      //   this.setState({error: err});
+      // });
     }
   }
 
@@ -775,6 +784,7 @@ class Account extends Component {
                 programOptions: progRes.programs,
                 typeOptions: progRes.types,
                 completed: compFinal,
+                completedOrigial: compFinal,
                 semesters: semsFinal,
                 allPrograms: progRes.allPrograms,
                 allCourses: classRes,
@@ -865,6 +875,37 @@ class Account extends Component {
     })
     .catch(err => {
       this.setState({error: err});
+    });
+  }
+
+  createNewProgram(newProgram, headers) {
+    const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completeds";
+    axios.post(updateProgramUrl, {
+      netid: this.state.netid,
+      name: newProgram.name,
+      type: newProgram.type
+    },
+    {
+      headers: headers
+    })
+    .then(res => {
+      this.setState({ progUpdated: "SUCCESS" });
+    })
+    .catch(err => {
+      this.setState({ progUpdated: "FAILED", error: true });
+    });
+  }
+
+  deleteCompleted(deletedId, headers) {
+    const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completeds/";
+    axios.delete(updateProgramUrl+deletedId, {
+      headers: headers
+    })
+    .then(res => {
+      this.setState({ progUpdated: "SUCCESS" });
+    })
+    .catch(err => {
+      this.setState({ progUpdated: "FAILED", error: true });
     });
   }
 
