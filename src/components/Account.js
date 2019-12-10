@@ -123,9 +123,9 @@ class Account extends Component {
       }
       this.getPidInfo(completed)
       .then(res => {
-        console.log(res.data);
+        console.log(res);
         const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=" + this.props.netid;
-        const payload = res.data.map(p => ({netid_id: this.props.netid, pid_id: p.pid}));
+        const payload = res.map(p => ({netid_id: this.props.netid, pid_id: p.pid}));
         console.log(payload);
 
         axios.post(updateProgramUrl, {
