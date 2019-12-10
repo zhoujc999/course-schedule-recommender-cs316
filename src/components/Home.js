@@ -52,6 +52,7 @@ class Home extends Component {
 
   componentDidMount() {
     this.getOptions().then(res => {
+      console.log(res);
       this.setState({options: res});
     })
   }
@@ -77,14 +78,13 @@ class Home extends Component {
 
     const planUrl = "https://course-schedule-recommender.herokuapp.com/api/plans?programs=";
     console.log(planUrl+selected.join(","));
-    axios.get(planUrl + selected.join(","))
+    return axios.get(planUrl + selected.join(","))
     .then(res => {
       console.log(res.data);
       const arr = res.data.map(plan => ({
         user: plan.netid,
         description: plan.description,
         planInfo: {
-          //TODO: change the attribute based on the actual response body
           programs: plan.plan_info.map(val => ({name: val.name, type: val.type}))
         },
         semesters: plan.semesters

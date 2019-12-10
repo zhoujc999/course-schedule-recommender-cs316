@@ -122,19 +122,28 @@ class Account extends Component {
         'Content-Type': 'application/json',
         'Authorization': 'FirebaseToken '+ this.props.token
       }
-      const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=" + this.props.netid;
-      axios.post(updateProgramUrl, {
-        netid: this.state.accountInfo.netid,
-        completed: this.state.completed
-      },
-      {
-        headers: headers
-      })
+      this.getPidInfo(completed)
       .then(res => {
-        this.setState({ progUpdated: "SUCCESS" });
+        console.log(res.data);
+        const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=" + this.props.netid;
+        const payload = res.data.map(p => ({netid_id: this.props.netid, pid_id: p.pid}));
+        console.log(payload);
+
+        axios.post(updateProgramUrl, {
+          payload
+        },
+        {
+          headers: headers
+        })
+        .then(res => {
+          this.setState({ progUpdated: "SUCCESS" });
+        })
+        .catch(err => {
+          this.setState({ progUpdated: "FAILED", error: true });
+        });
       })
       .catch(err => {
-        this.setState({ progUpdated: "FAILED", error: true });
+        this.setState({error: err});
       });
     }
   }
@@ -833,6 +842,21 @@ class Account extends Component {
       const pMap = programs.map(p => ({ name: p, label: p }));
       const tMap = types.map(t => ({ type: t, label: t }));
       return { programs: pMap, types: tMap, allPrograms: res.data };
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+  getPidInfo(completedPrograms) {
+    return this.getProgramInfo()
+    .then(res => {
+      const completedWithPids = [];
+      const allPrograms = res.data;
+      completedPrograms.forEach(completed=> {
+        completedWithPids.push(allPrograms.find(p => p.name === completed.name && p.type === completed.type));
+      })
+      return completedWithPids;
     })
     .catch(err => {
       this.setState({error: err});
