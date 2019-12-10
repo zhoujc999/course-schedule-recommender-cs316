@@ -45,15 +45,14 @@ class Home extends Component {
       selected: [],
       plans: [],
       querySubmitted: false,
-      error: null,
-      all_programs: []
+      error: null
     };
     this.handleSearchPlans = this.handleSearchPlans.bind(this);
   }
 
   componentDidMount() {
     this.getOptions().then(res => {
-      this.setState({options: res.prog, all_programs: res.all_programs});
+      this.setState({options: res});
     })
   }
 
@@ -63,7 +62,7 @@ class Home extends Component {
     .then(res => {
       const programs = [...new Set(res.data.map(val => val.name))];
       programs.sort();
-      return {prog: programs.map(p => ({value: p, label: p})), all_programs: res.data};
+      return programs.map(p => ({value: p, label: p}));
     })
     .catch(err => {
       this.setState({error: err});

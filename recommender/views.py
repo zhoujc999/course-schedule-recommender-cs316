@@ -1,4 +1,3 @@
-import json
 from django.views.decorators.cache import never_cache
 from django.db.utils import IntegrityError
 from django.views.generic.base import TemplateView
@@ -25,6 +24,7 @@ from rest_framework import status
 from rest_framework import response
 from rest_framework import request
 from rest_framework.permissions import IsAuthenticated, AllowAny
+#  import json
 
 index = never_cache(TemplateView.as_view(template_name='index.html'))
 
@@ -64,6 +64,11 @@ class SemesterByNetidView(views.APIView):
         program_type = request.GET.get('type')
         if not sem_number or not class_id or not program_name or not program_type:
             semester_list = list(Semester.objects.filter(netid=student_netid).values())
+            for semester in semester_list:
+                program_instance = Program.objects.get(pid=semester["pid_id"])
+                program = model_to_dict(program_instance)
+                semester["name"] = program["name"]
+                semester["type"] = program["type"]
             return JsonResponse(semester_list, safe=False)
         try:
             program_instance = Program.objects.get(name=program_name,
@@ -81,6 +86,8 @@ class SemesterByNetidView(views.APIView):
             return JsonResponse({"detail": "No semester with netid, semester_number, classid, name and type found."},
                                 status=status.HTTP_400_BAD_REQUEST, safe=False)
         semester = model_to_dict(semester_instance)
+        semester["name"] = program_name
+        semester["type"] = program_type
         return JsonResponse(semester, safe=False)
 
     def post(self, request, format=None):
@@ -118,6 +125,11 @@ class CompletedByNetidView(views.APIView):
         program_type = request.GET.get('type')
         if not program_name or not program_type:
             completed_list = list(Completed.objects.filter(netid=student_netid).values())
+            for completed in completed_list:
+                program_instance = Program.objects.get(pid=completed["pid_id"])
+                program = model_to_dict(program_instance)
+                completed["name"] = program["name"]
+                completed["type"] = program["type"]
             return JsonResponse(completed_list, safe=False)
         try:
             program_instance = Program.objects.get(name=program_name,
@@ -133,6 +145,8 @@ class CompletedByNetidView(views.APIView):
             return JsonResponse({"detail": "No completed with netid, name and type found."},
                                 status=status.HTTP_400_BAD_REQUEST, safe=False)
         completed = model_to_dict(completed_instance)
+        completed["name"] = program_name
+        completed["type"] = program_type
         return JsonResponse(completed, safe=False)
 
     def post(self, request, format=None):
