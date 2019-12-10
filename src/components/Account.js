@@ -215,26 +215,106 @@ class Account extends Component {
         }
       }
     }
-    if (canUpdate === true) {
+    if (canUpdate === true && this.state.semsUpdated !== 'INITIAL') {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'FirebaseToken '+ this.props.token
+      }
+
       const originalSems = this.state.semestersOriginal;
       const selectedSems = this.state.semesters;
-      //delete all entries from sems
-      if (this.state.semsUpdated !== 'INITIAL') {
-        this.deleteSemsAll(originalSems)
+      //create original semester objects to be deleted
+      const originalSemsObj = [];
+      const selectedSemsObj = [];
+      //TODO: replace DUMMY defaultValue
+      const DUMMY_NAME = 'History';
+      const DUMMY_TYPE = 'Minor';
+      originalSems.forEach(os => {
+        os.courses.forEach(c => {
+          originalSemsObj.push({
+            sem_number: os.sem_num,
+            classid: c.code,
+            name: DUMMY_NAME,
+            type: DUMMY_TYPE
+          });
+        })
+      });
+
+      selectedSems.forEach(ss => {
+        ss.courses.forEach(c => {
+          selectedSemsObj.push({
+            sem_number: ss.sem_num,
+            classid: c.code,
+            name: DUMMY_NAME,
+            type: DUMMY_TYPE
+          });
+        })
+      });
+
+      originalSemsObj.map(obj => this.getSemesterId(obj))
+      .then(res => {
+        Promise.all(res.map(id => this.deleteSemester(id, headers)))
         .then(res => {
-          this.postSemsAll(selectedSems)
+          Promise.all(selectedSemsObj.map(obj => this.postSemester(obj, headers)))
           .then(res => {
             this.setState({ semsUpdated: "SUCCESS" });
           })
-          .catch(err => {
+          .catch(error => {
             this.setState({ semsUpdated: "FAILED" });
           })
         })
         .catch(err => {
           this.setState({ semsUpdated: "FAILED" });
-        })
-      }
+        });
+      })
+      .catch(err => {
+        this.setState({ semsUpdated: "FAILED" });
+      })
     }
+  }
+
+  getSemesterId(obj) {
+    const semesterUrl = 'https://course-schedule-recommender.herokuapp.com/api/semestersbynetid?';
+    const sems_num = 'semester_number=' + obj.sem_number;
+    const netid = '&netid=' + this.state.accountInfo.netid;
+    const classid = '&classid=' + obj.classid;
+    const name = '&name=' + obj.name;
+    const type = '&type=' + obj.type;
+
+    return axios.get(semesterUrl + sems_num + netid + classid + name + type)
+    .then(res => {
+      return res.id;
+    })
+    .catch(err => {
+      this.setState({error: err});
+    })
+  }
+
+  deleteSemester(id, headers) {
+    const deleteSemUrl = 'https://course-schedule-recommender.herokuapp.com/api/semesters/' + id + '/';
+    axios.delete(deleteSemUrl, {
+      headers
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
+  }
+
+  postSemester(obj, headers) {
+    const postSemUrl = 'https://course-schedule-recommender.herokuapp.com/api/semestersbynetid';
+    axios.post(postSemUrl, {
+      semester_number: obj.sem_number,
+      netid: this.state.accountInfo.netid,
+      classid: obj.classid,
+      name: obj.name,
+      type: obj.type
+    },
+    {
+      headers
+    })
+    .catch(err => {
+      this.setState({error: err});
+    });
   }
 
   renderAccountInfo() {
