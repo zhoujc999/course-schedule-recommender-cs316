@@ -24,7 +24,7 @@ from rest_framework import status
 from rest_framework import response
 from rest_framework import request
 from rest_framework.permissions import IsAuthenticated, AllowAny
-#  import json
+import json
 
 index = never_cache(TemplateView.as_view(template_name='index.html'))
 
@@ -91,11 +91,12 @@ class SemesterByNetidView(views.APIView):
         return JsonResponse(semester, safe=False)
 
     def post(self, request, format=None):
-        student_netid = request.POST.get('netid')
-        sem_number = request.POST.get('semester_number')
-        class_id = request.POST.get('classid')
-        program_name = request.POST.get('name')
-        program_type = request.POST.get('type')
+        request_dict = json.loads(request.body)
+        student_netid = request_dict.get('netid')
+        sem_number = request_dict.get('semester_number')
+        class_id = request_dict.get('classid')
+        program_name = request_dict.get('name')
+        program_type = request_dict.get('type')
         try:
             program_instance = Program.objects.get(name=program_name,
                                                    type=program_type)
@@ -150,9 +151,10 @@ class CompletedByNetidView(views.APIView):
         return JsonResponse(completed, safe=False)
 
     def post(self, request, format=None):
-        student_netid = request.POST.get('netid')
-        program_name = request.POST.get('name')
-        program_type = request.POST.get('type')
+        request_dict = json.loads(request.body)
+        student_netid = request_dict.get('netid')
+        program_name = request_dict.get('name')
+        program_type = request_dict.get('type')
         try:
             program_instance = Program.objects.get(name=program_name,
                                                    type=program_type)
