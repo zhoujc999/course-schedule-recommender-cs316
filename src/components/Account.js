@@ -29,6 +29,7 @@ class Account extends Component {
       completed: [], //Programs completed -> Completed + Program DB
       completedOriginal: [], // save the original programs completed
       semesters: [], //Sems of classes completed -> Semester + Class DB
+      semestersOriginal: [],
       bioUpdated: "INITIAL",
       progUpdated: "INITIAL",
       semsUpdated: "INITIAL",
@@ -203,6 +204,10 @@ class Account extends Component {
       }
     }
     if (canUpdate === true) {
+      const originalSems = this.state.semestersOriginal;
+      const selectedSems = this.state.semesters;
+      const newSems = selectedSems.filter(s => (s.sem_num))
+
       this.setState({ semsUpdated: "SUCCESS" }); //TODO: UPDATE BACKEND/DB
     } else {
       this.setState({ semsUpdated: "FAILED" });
@@ -786,6 +791,7 @@ class Account extends Component {
                 completed: compFinal,
                 completedOrigial: compFinal,
                 semesters: semsFinal,
+                semestersOriginal: semsFinal,
                 allPrograms: progRes.allPrograms,
                 allCourses: classRes,
                 loading: "SUCCESS"
@@ -879,7 +885,7 @@ class Account extends Component {
   }
 
   createNewProgram(newProgram, headers) {
-    const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completeds";
+    const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completeds/";
     axios.post(updateProgramUrl, {
       netid: this.state.netid,
       name: newProgram.name,
