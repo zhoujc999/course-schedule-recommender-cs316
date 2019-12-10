@@ -895,6 +895,8 @@ class Account extends Component {
                   semsFinal.push(newSem);
                 }
               }
+              console.log(accountRes);
+              console.log()
               this.setState({
                 accountInfo: {netid: accountRes.netid, bio: accountRes.description},
                 programOptions: progRes.programs,
