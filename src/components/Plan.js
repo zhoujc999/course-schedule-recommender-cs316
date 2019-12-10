@@ -46,6 +46,7 @@ class Plan extends Component {
           {...other}
         />);
     }
+    console.log(semesterVals)
     return (
       <div>
         <div className="plan_info">
