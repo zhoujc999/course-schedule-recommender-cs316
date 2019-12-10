@@ -118,12 +118,10 @@ class Home extends Component {
             <Select
               multi
               clearable
-              create
               options={this.state.selected.length >= 3 ? this.state.selected : this.state.options}
               values={this.state.selected}
               placeholder={"Select Plan(s)"}
               onChange={(values) => this.setState({ selected: values })}
-              onCreateNew={(value) => this.setState({ selected: [...this.state.selected, value] })}
             />
             </div>
             <div className="btn">
@@ -168,7 +166,7 @@ class Home extends Component {
 
   renderPlanComponents() {
     //Renders plans based on what user selected in state
-    const { plans, all_programs } = this.state;
+    const { plans } = this.state;
     const planComponents = [];
     for (let i = 0; i < plans.length; i++) {
       planComponents.push(
@@ -176,7 +174,6 @@ class Home extends Component {
           input={plans[i]}
           p_key={i}
           key={i}
-          program_dict={all_programs}
         />);
     }
     return (

@@ -51,3 +51,9 @@
   height: 2px;
   font-weight: 400;
 }
+
+.search {
+  margin-right: 180px;
+  font-size: 24px;
+  color: #00334e;
+}
