@@ -132,25 +132,33 @@ class Account extends Component {
       console.log(newPrograms);
       const oldPrograms = originalPrograms.filter(p => !selectedPrograms.includes(p));
       console.log(oldPrograms)
-      //need to create new entries, POST to completeds
 
-      newPrograms.forEach(p => {
-        this.createNewProgram(p, headers);
-      })
-      //need to delete old entries, DELETE from completeds/id
       this.getCompleted()
       .then(res => {
-        //list of ids to be deleted from completeds
+        //get list of ids to be deleted from completeds
+        const deletedIds = [];
         oldPrograms.forEach(p => {
-          const deletedId = res.find(completed => (completed.name === p.name && completed.type === p.type)).id;
-          this.deleteCompleted(deletedId, headers);
+          deletedIds.push(res.find(completed => (completed.name === p.name && completed.type === p.type)).id);
+        });
+        //create DELETE Promises to delete old completed entries
+        Promise.all(deletedIds.map(id => this.deleteCompleted(id, headers)))
+        .then(res => {
+          //create POST promises to add new completed entries
+          Promise.all(newPrograms.map(p => this.createNewProgram(p, headers)))
+          .then(res => {
+            this.setState({ progUpdated: "SUCCESS"});
+          })
+          .catch(err => {
+            this.setState({error: err});
+          })
+        })
+        .catch(err => {
+          this.setState({error: err});
         })
       })
       .catch(err => {
         this.setState({error: err});
       })
-
-      this.setState({ progUpdated: "SUCCESS" });
 
       // this.getPidInfo(completed)
       // .then(res => {
@@ -212,19 +220,19 @@ class Account extends Component {
       const selectedSems = this.state.semesters;
       //delete all entries from sems
       if (this.state.semsUpdated !== 'INITIAL') {
-        // this.deleteSemsAll(originalSems)
-        // .then(res => {
-        //   this.postSemsAll(selectedSems)
-        //   .then(res => {
-        //     this.setState({ semsUpdated: "SUCCESS" });
-        //   })
-        //   .catch(err => {
-        //     this.setState({ semsUpdated: "FAILED" });
-        //   })
-        // })
-        // .catch(err => {
-        //   this.setState({ semsUpdated: "FAILED" });
-        // })
+        this.deleteSemsAll(originalSems)
+        .then(res => {
+          this.postSemsAll(selectedSems)
+          .then(res => {
+            this.setState({ semsUpdated: "SUCCESS" });
+          })
+          .catch(err => {
+            this.setState({ semsUpdated: "FAILED" });
+          })
+        })
+        .catch(err => {
+          this.setState({ semsUpdated: "FAILED" });
+        })
       }
     }
   }
