@@ -101,12 +101,14 @@ class Home extends Component {
     this.getPlans().then(res => {
       // TODO add logic to get real plan data based on selected
       // Below is DUMMY data that needs replacing
+      console.log(res);
       const plans = res.filter(plan => {
         return selected.some(s => {
           let p = plan.planInfo.programs.find(program => program.name === s.value);
           return p !== undefined
         })
       });
+      console.log(plans);
       this.setState({ plans, querySubmitted: true });
     })
   }
@@ -162,6 +164,7 @@ class Home extends Component {
 
   renderPlans() {
     const { plans } = this.state;
+    console.log('getting here');
     return (
       <div>
         {plans.length > 0 ? this.renderPlanComponents() : this.renderEmptyPlans()}
