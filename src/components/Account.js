@@ -202,6 +202,7 @@ class Account extends Component {
     const { semesters } = this.state;
     let canUpdate = true;
     for (let i = 0; i < semesters.length; i++) {
+      console.log(semesters[i])
       if (semesters[i].courses.length === 0) {
         canUpdate = false;
         break;
