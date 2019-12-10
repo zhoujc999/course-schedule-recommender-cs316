@@ -24,10 +24,10 @@ class Plan extends Component {
           {programs}
         </div>
         <div className="plan_user">
-          {`User: ${planInfo.user}`}
+          {`User: test ${planInfo.user}`}
         </div>
         <div className="plan_user_descr">
-          {`Description: ${planInfo.description}`}
+          {`Description: test ${planInfo.description}`}
         </div>
       </div>
     );
