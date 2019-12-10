@@ -10,7 +10,6 @@ class Semester extends Component {
 
   render() {
     const { sem_data, ...other } = this.props;
-    console.log(this.props);
     const courses = [];
     for (let i = 0; i < sem_data.length; i++) {
       courses.push(

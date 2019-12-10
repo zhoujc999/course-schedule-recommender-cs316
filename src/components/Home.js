@@ -45,14 +45,15 @@ class Home extends Component {
       selected: [],
       plans: [],
       querySubmitted: false,
-      error: null
+      error: null,
+      all_programs: []
     };
     this.handleSearchPlans = this.handleSearchPlans.bind(this);
   }
 
   componentDidMount() {
     this.getOptions().then(res => {
-      this.setState({options: res});
+      this.setState({options: res.prog, all_programs: res.all_programs});
     })
   }
 
@@ -62,7 +63,7 @@ class Home extends Component {
     .then(res => {
       const programs = [...new Set(res.data.map(val => val.name))];
       programs.sort();
-      return programs.map(p => ({value: p, label: p}));
+      return {prog: programs.map(p => ({value: p, label: p})), all_programs: res.data};
     })
     .catch(err => {
       this.setState({error: err});
@@ -76,7 +77,6 @@ class Home extends Component {
     }
 
     const planUrl = "https://course-schedule-recommender.herokuapp.com/api/plans?programs=";
-    console.log(planUrl+selected.join(","));
     return axios.get(planUrl + selected.join(","))
     .then(res => {
       const arr = res.data.map(plan => ({
@@ -87,7 +87,6 @@ class Home extends Component {
         },
         semesters: plan.semesters
       }));
-      console.log(arr);
       return arr;
     })
     .catch(err => {
@@ -99,16 +98,12 @@ class Home extends Component {
     //Updates plans in state based on what is selected
     const { selected } = this.state;
     this.getPlans().then(res => {
-      // TODO add logic to get real plan data based on selected
-      // Below is DUMMY data that needs replacing
-      console.log(res);
       const plans = res.filter(plan => {
         return selected.some(s => {
           let p = plan.planInfo.programs.find(program => program.name === s.value);
           return p !== undefined
         })
       });
-      console.log(plans);
       this.setState({ plans, querySubmitted: true });
     })
   }
@@ -164,7 +159,6 @@ class Home extends Component {
 
   renderPlans() {
     const { plans } = this.state;
-    console.log('getting here');
     return (
       <div>
         {plans.length > 0 ? this.renderPlanComponents() : this.renderEmptyPlans()}
@@ -174,11 +168,7 @@ class Home extends Component {
 
   renderPlanComponents() {
     //Renders plans based on what user selected in state
-    const { plans } = this.state;
-    /* TODO logic to find relevant plans from database
-    Below code renders a plan for each input, but later on
-    we want to find and order the plans based on more factors
-    (plus needs to handle plans with multiple tags) */
+    const { plans, all_programs } = this.state;
     const planComponents = [];
     for (let i = 0; i < plans.length; i++) {
       planComponents.push(
@@ -186,6 +176,7 @@ class Home extends Component {
           input={plans[i]}
           p_key={i}
           key={i}
+          program_dict={all_programs}
         />);
     }
     return (

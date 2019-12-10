@@ -12,10 +12,10 @@ class Course extends Component {
 
   render() {
     const {
-      course_data,
+      course_data, program_dict,
       p_key, s_key, c_key
     } = this.props;
-    console.log(this.props);
+    let prog = program_dict.find(p => p.pid === course_data.taken_pid);
     return (
       <div className="course">
         <div
@@ -34,7 +34,7 @@ class Course extends Component {
           <br/>
           {`Class Name: ${course_data.name}`}
           <br />
-          {`Taken For: ${course_data.taken_pid}`}
+          {`Taken For: ${prog.name} ${prog.type}`}
         </ReactTooltip>
       </div>
     );
