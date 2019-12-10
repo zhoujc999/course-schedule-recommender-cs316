@@ -100,6 +100,7 @@ class Home extends Component {
   handleSearchPlans() {
     //Updates plans in state based on what is selected
     const { selected } = this.state;
+    console.log(this.getPlans());
     this.getPlans().then(res => {
       // TODO add logic to get real plan data based on selected
       // Below is DUMMY data that needs replacing
@@ -109,6 +110,7 @@ class Home extends Component {
           return p !== undefined
         })
       });
+      console.log(plans);
       this.setState({ plans, querySubmitted: true });
     })
   }

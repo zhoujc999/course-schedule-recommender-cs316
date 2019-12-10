@@ -123,7 +123,7 @@ class Account extends Component {
         'Authorization': 'FirebaseToken '+ this.props.token
       }
       const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid?netid=" + this.props.netid;
-      axios.put(updateProgramUrl, {
+      axios.post(updateProgramUrl, {
         netid: this.state.accountInfo.netid,
         completed: this.state.completed
       },
