@@ -2,15 +2,11 @@ import './stylesheets/Plan.css';
 import Semester from './Semester';
 import React, { Component } from "react";
 
-//Temporary semester and course data
-//TODO get real semester and course data from database in home
-
 class Plan extends Component {
   /* Each Plan corresponding to the user's request
   made up of semesters and courses. Data received from
   databse (semester and course tables) and passed down
-  to child components*/
-  //Plan creates multiple Semester components
+  to child components */
 
   renderPlanInfo(planInfo) {
     const programs = planInfo.programs.map(p => `${p.name} ${p.type}`).map(ps => (
@@ -34,26 +30,25 @@ class Plan extends Component {
   }
 
   render() {
-    //TODO update DUMMY_SEMESTER_DATA constant to be true data
     const { input, ...other } = this.props;
-    const semesters = [];
-    for (let i = 0; i < input.semesters.length; i++) {
-      semesters.push(
-        <Semester
-          sem_data={input.semesters[i]}
-          s_key={i}
-          key={i}
+    const semesterVals = [];
+    for (var key of Object.keys(input.semesters)) {
+      semesterVals.push(<Semester
+          sem_data={input.semesters[key]}
+          s_key={key}
+          key={key}
           {...other}
         />);
     }
     return (
-      <div>
+      <div className="plan_container">
         <div className="plan_info">
           {this.renderPlanInfo(input.planInfo)}
         </div>
         <div className="plan">
-          {semesters}
+          {semesterVals}
         </div>
+        <hr className="hrstyle_main" />
       </div>
     );
   }

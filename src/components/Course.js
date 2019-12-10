@@ -12,17 +12,25 @@ class Course extends Component {
 
   render() {
     const {
-      course_data,
+      course_data, program_dict,
       p_key, s_key, c_key
     } = this.props;
-
+    let prog = "";
+    prog = program_dict.find(p => p.pid === course_data.taken_pid);
+    if (prog === "") {
+      return (
+        <div>
+          Loading...
+        </div>
+      )
+    }
     return (
       <div className="course">
         <div
           className="course_code"
           data-tip data-for={`p${p_key}s${s_key}c${c_key}`}
         >
-          {course_data.code}
+          {course_data.classid}
         </div>
         <ReactTooltip
           id={`p${p_key}s${s_key}c${c_key}`}
@@ -30,11 +38,11 @@ class Course extends Component {
           type="light"
           effect="float"
         >
-          {`Class Code: ${course_data.code}`}
+          {`Class Code: ${course_data.classid}`}
           <br/>
           {`Class Name: ${course_data.name}`}
           <br />
-          {`Taken For: ${course_data.taken_for}`}
+          {`Taken For: ${prog.name} ${prog.type}`}
         </ReactTooltip>
       </div>
     );

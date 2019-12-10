@@ -11,10 +11,10 @@ class Semester extends Component {
   render() {
     const { sem_data, ...other } = this.props;
     const courses = [];
-    for (let i = 0; i < sem_data.courses.length; i++) {
+    for (let i = 0; i < sem_data.length; i++) {
       courses.push(
         <Course
-          course_data={sem_data.courses[i]}
+          course_data={sem_data[i]}
           c_key={i}
           key={i}
           {...other}
@@ -23,7 +23,7 @@ class Semester extends Component {
     return (
       <div className="sem_container">
         <div className="semester_text">
-          {"Semester "+sem_data.sem_num}
+          {"Semester "+this.props.s_key}
         </div>
         <div className="semester_courses">
           {courses}
