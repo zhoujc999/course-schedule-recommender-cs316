@@ -45,7 +45,7 @@ class Plan extends Component {
   render() {
     //TODO update DUMMY_SEMESTER_DATA constant to be true data
     const { input, ...other } = this.props;
-    const semesters = [];
+    const semesters = [1,2,3];
     for (let i = 0; i < input.semesters.length; i++) {
       semesters.push(
         <Semester
