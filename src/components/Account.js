@@ -239,7 +239,7 @@ class Account extends Component {
             sem_number: os.sem_num,
             classid: c.code,
             name: c.taken_for.split(',')[0],
-            type: c.taken_for.split(',')[1]
+            type: c.taken_for.split(',')[1].trim()
           });
         })
       });
@@ -250,7 +250,7 @@ class Account extends Component {
             sem_number: ss.sem_num,
             classid: c.code,
             name: c.taken_for.split(',')[0],
-            type: c.taken_for.split(',')[1]
+            type: c.taken_for.split(',')[1].trim()
           });
         })
       });
