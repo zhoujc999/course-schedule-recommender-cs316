@@ -40,7 +40,7 @@ class Plan extends Component {
     const semesterVals = [];
     for (var key of Object.keys(input.semesters)) {
       semesterVals.push(<Semester
-          sem_data={input.semesters[key]}
+          sem_data={input.semesters.1}
           s_key={key}
           key={key}
           {...other}
