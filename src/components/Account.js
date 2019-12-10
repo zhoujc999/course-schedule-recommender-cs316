@@ -24,7 +24,6 @@ import axios from 'axios';
 class Account extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       accountInfo: {netid: "", bio: ""}, //User ID, email, bio -> Student DB
       completed: [], //Programs completed -> Completed + Program DB
@@ -637,10 +636,7 @@ class Account extends Component {
 
   renderSemesters() {
     //Render schedule with at least one semester
-    //TODO: replace DUMMY_SEMESTERS with real data
     const { semesters, semsUpdated } = this.state;
-    console.log('RENDERING SEMESTERs')
-    console.log(semesters)
     const sems = this.state.semesters.map((sem, i) => (
         <div className="indiv_semester" key={i}>
           <div className="semester_label">Semester {sem.sem_num}</div>
@@ -739,13 +735,11 @@ class Account extends Component {
   // }
 
   componentDidMount() {
-    // console.log(this.props)
     this.getAccountInfo().then(accountRes => {
       this.getProgramInfo().then(progRes => {
         this.getCompleted().then(compRes => {
           this.getClassInfo().then(classRes => {
             this.getSemesters().then(semRes => {
-              console.log(accountRes);
               let compFinal;
               if (compRes.length === 0) {
                 compFinal = [];
@@ -852,9 +846,9 @@ class Account extends Component {
     return this.getProgramInfo()
     .then(res => {
       const completedWithPids = [];
-      const allPrograms = res.data;
+      console.log(res.allPrograms);
       completedPrograms.forEach(completed=> {
-        completedWithPids.push(allPrograms.find(p => p.name === completed.name && p.type === completed.type));
+        completedWithPids.push(res.allPrograms.find(p => p.name === completed.name && p.type === completed.type));
       })
       return completedWithPids;
     })
@@ -876,7 +870,6 @@ class Account extends Component {
 
   render() {
     const { completed, semesters, loading } = this.state;
-    console.log(this.state)
     if (loading !== "SUCCESS") {
       return (
         <div>
