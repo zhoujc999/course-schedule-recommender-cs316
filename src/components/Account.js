@@ -212,13 +212,19 @@ class Account extends Component {
       const selectedSems = this.state.semesters;
       //delete all entries from sems
       if (this.state.semsUpdated !== 'INITIAL') {
-        this.deleteSemsAll()
-        .then
-
-        this.setState({ semsUpdated: "SUCCESS" }); //TODO: UPDATE BACKEND/DB
-      }
-      else {
-        this.setState({ semsUpdated: "FAILED" });
+        // this.deleteSemsAll(originalSems)
+        // .then(res => {
+        //   this.postSemsAll(selectedSems)
+        //   .then(res => {
+        //     this.setState({ semsUpdated: "SUCCESS" });
+        //   })
+        //   .catch(err => {
+        //     this.setState({ semsUpdated: "FAILED" });
+        //   })
+        // })
+        // .catch(err => {
+        //   this.setState({ semsUpdated: "FAILED" });
+        // })
       }
     }
   }
