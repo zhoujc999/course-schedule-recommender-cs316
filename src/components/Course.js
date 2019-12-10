@@ -15,7 +15,7 @@ class Course extends Component {
       course_data,
       p_key, s_key, c_key
     } = this.props;
-
+    console.log(this.props);
     return (
       <div className="course">
         <div
