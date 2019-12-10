@@ -11,7 +11,7 @@ class Plan extends Component {
   databse (semester and course tables) and passed down
   to child components*/
   //Plan creates multiple Semester components
-
+  //{`User: ${planInfo.user}`}
   renderPlanInfo(planInfo) {
     const programs = planInfo.programs.map(p => `${p.name} ${p.type}`).map(ps => (
       <span className="program">
@@ -25,8 +25,7 @@ class Plan extends Component {
           {programs}
         </div>
         <div className="plan_user">
-          //{`User: ${planInfo.user}`}
-            {`User: {name}`}
+          {`User: ${name}`}
         </div>
         <div className="plan_user_descr">
           {`Description: ${planInfo.description}`}
