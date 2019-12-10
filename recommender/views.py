@@ -31,10 +31,6 @@ index = never_cache(TemplateView.as_view(template_name='index.html'))
 class ProgramView(viewsets.ModelViewSet):
     permission_classes = (ReadPermission,)
     serializer_class = ProgramSerializer
-    #  def get_queryset(self):
-        #  user = self.request.user
-        #  queryset = Program.objects.filter(uid=user)
-        #  return queryset
     queryset = Program.objects.all()
 
 class ClassView(viewsets.ModelViewSet):
@@ -59,7 +55,7 @@ class CompletedView(viewsets.ModelViewSet):
 
 
 class SemesterByNetidView(views.APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (ReadPermission,)
     def get(self, request, format=None):
         student_netid = request.GET.get('netid')
         sem_number = request.GET.get('semester_number')
@@ -110,12 +106,12 @@ class SemesterByNetidView(views.APIView):
         except IntegrityError:
             return JsonResponse({"detail": "Duplicate semester entry."},
                                 status=status.HTTP_400_BAD_REQUEST, safe=False)
-        return JsonResponse({""}, status=status.HTTP_201_CREATED, safe=False)
+        return JsonResponse({"id": semester.pk}, status=status.HTTP_201_CREATED, safe=False)
 
 
 
 class CompletedByNetidView(views.APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (ReadPermission,)
     def get(self, request, format=None):
         student_netid = request.GET.get('netid')
         program_name = request.GET.get('name')
@@ -156,7 +152,7 @@ class CompletedByNetidView(views.APIView):
         except IntegrityError:
             return JsonResponse({"detail": "Duplicate completed entry."},
                                 status=status.HTTP_400_BAD_REQUEST, safe=False)
-        return JsonResponse({""}, status=status.HTTP_201_CREATED, safe=False)
+        return JsonResponse({"id": completed.pk}, status=status.HTTP_201_CREATED, safe=False)
 
     #  def put(self, request, format=None):
         #  request_dict = json.loads(request.body)
