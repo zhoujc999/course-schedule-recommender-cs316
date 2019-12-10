@@ -17,7 +17,8 @@ class Signup extends Component {
       password1: '',
       password2: '',
       isAuthed: false,
-      error: null
+      error: null,
+      token: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.verifyNetId = this.verifyNetId.bind(this);
@@ -62,9 +63,6 @@ class Signup extends Component {
       //reset the state after successful user registration
       .then(() => {
         this.setState({
-          netid: '',
-          password1: '',
-          password2: '',
           isAuthed: true,
           error: null
         });
@@ -72,13 +70,11 @@ class Signup extends Component {
         if (this.state.isAuthed) {
           this.props.firebase.doRetrieveToken()
           .then((idToken) => {
-            console.log(idToken);
+            this.setState({token: idToken})
           })
           .catch(err => {
             this.setState({error: err});
           });
-
-          this.props.history.push("/account");
         }
       })
       .catch(err => {
@@ -89,6 +85,14 @@ class Signup extends Component {
   render() {
     const isInvalid = this.state.password1 !== this.state.password2 ||
       this.state.password1 === '' || this.state.netid === '';
+
+    if (this.state.isAuthed === true && this.state.token !== '') {
+      return (
+        <div>
+          <Account netid={this.state.netid} token={this.state.token}  />
+        </div>
+      )
+    }
 
     return (
       <div id="signup">
