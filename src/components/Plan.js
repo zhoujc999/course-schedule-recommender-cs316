@@ -10,7 +10,7 @@ class Plan extends Component {
   made up of semesters and courses. Data received from
   databse (semester and course tables) and passed down
   to child components
-      */
+      let i = 0; i < Object.keys(input.semester).length; i++*/
   //Plan creates multiple Semester components
   //{`User: ${planInfo.user}`}
   renderPlanInfo(planInfo) {
@@ -38,13 +38,15 @@ class Plan extends Component {
     //TODO update DUMMY_SEMESTER_DATA constant to be true data
     const { input, ...other } = this.props;
     const semesterVals = [];
-    for (let i = 0; i < Object.keys(input.semester).length; i++) {
+    const i = 0;
+    for (var x in input.semester) {
       semesterVals.push(<Semester
-          sem_data={input.semesters[i]}
+          sem_data={x}
           s_key={i}
           key={i}
           {...other}
         />);
+        i = i + 1;
     }
     return (
       <div>
