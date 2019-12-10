@@ -18,18 +18,15 @@ class Plan extends Component {
         {ps}
       </span>
     ))
-    const names = planInfo.map(p => `${p.user}`).map(ps => (
-      <span className="program">
-        {ps}
-      </span>
-    ))
+    const name = 5
     return (
       <div className="plan_text">
         <div className="plan_programs">
           {programs}
         </div>
         <div className="plan_user">
-          {`User: {names}`}
+          //{`User: ${planInfo.user}`}
+            {`User: {name}`}
         </div>
         <div className="plan_user_descr">
           {`Description: ${planInfo.description}`}
