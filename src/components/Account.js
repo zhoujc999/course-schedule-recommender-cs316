@@ -209,7 +209,7 @@ class Account extends Component {
       } else {
         for (let j = 0; j < semesters[i].courses.length; j++) {
           let course = semesters[i].courses[j];
-          if (course.code.trim() === "" || course.name.trim() === "" || course.taken_for.trim() === "") {
+          if (course.code.trim() === "" || course.taken_for.trim() === "") {
             canUpdate = false;
             break;
           }
