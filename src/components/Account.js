@@ -128,10 +128,11 @@ class Account extends Component {
       const newPrograms = selectedPrograms.filter(p => !originalPrograms.includes(p));
       const oldPrograms = originalPrograms.filter(p => !selectedPrograms.includes(p));
       //need to create new entries, POST to completeds
+
       newPrograms.forEach(p => {
         this.createNewProgram(p, headers);
       })
-
+      //need to delete old entries, DELETE from completeds/id
       this.getCompleted()
       .then(res => {
         //list of ids to be deleted from completeds
@@ -144,15 +145,14 @@ class Account extends Component {
         this.setState({error: err});
       })
 
+      this.setState({ progUpdated: "SUCCESS" });
+
       // this.getPidInfo(completed)
       // .then(res => {
       //   const netidWithIds = res.map(p => ({netid_id: this.props.netid, pid_id: p.pid}));
       //   //need to delete old entries, DELETE from completeds/id
       //   //to get ids GET from completeds/id
       // })
-      // .catch(err => {
-      //   this.setState({error: err});
-      // });
     }
   }
 
@@ -888,9 +888,6 @@ class Account extends Component {
     {
       headers: headers
     })
-    .then(res => {
-      this.setState({ progUpdated: "SUCCESS" });
-    })
     .catch(err => {
       this.setState({ progUpdated: "FAILED", error: true });
     });
@@ -900,9 +897,6 @@ class Account extends Component {
     const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completeds/";
     axios.delete(updateProgramUrl+deletedId, {
       headers: headers
-    })
-    .then(res => {
-      this.setState({ progUpdated: "SUCCESS" });
     })
     .catch(err => {
       this.setState({ progUpdated: "FAILED", error: true });
