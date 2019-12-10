@@ -42,9 +42,9 @@ class Plan extends Component {
   render() {
     //TODO update DUMMY_SEMESTER_DATA constant to be true data
     const { input, ...other } = this.props;
-    const semesters = [];
+    const semesterVals = [1,2,3];
     for (let i = 0; i < input.semesters.length; i++) {
-      semesters.push(1);
+      semesterVals.push(1);
     }
     return (
       <div>
@@ -52,7 +52,7 @@ class Plan extends Component {
           {this.renderPlanInfo(input.planInfo)}
         </div>
         <div className="plan">
-          {semesters}
+          {semesterVals}
         </div>
       </div>
     );
