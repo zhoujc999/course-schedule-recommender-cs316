@@ -793,7 +793,7 @@ class Account extends Component {
                 programOptions: progRes.programs,
                 typeOptions: progRes.types,
                 completed: compFinal,
-                completedOrigial: compFinal,
+                completedOriginal: compFinal,
                 semesters: semsFinal,
                 semestersOriginal: semsFinal,
                 allPrograms: progRes.allPrograms,
