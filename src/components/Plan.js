@@ -38,7 +38,6 @@ class Plan extends Component {
     //TODO update DUMMY_SEMESTER_DATA constant to be true data
     const { input, ...other } = this.props;
     const semesterVals = [];
-    const i = 0;
     for (var key of Object.keys(input.semesters)) {
       semesterVals.push(<Semester
           sem_data={input.semesters[key]}
@@ -46,7 +45,6 @@ class Plan extends Component {
           key={key}
           {...other}
         />);
-        i = i + 1;
     }
     return (
       <div>
