@@ -857,6 +857,11 @@ class Account extends Component {
         this.getCompleted().then(compRes => {
           this.getClassInfo().then(classRes => {
             this.getSemesters().then(semRes => {
+              console.log(accountRes)
+              console.log(progRes)
+              console.log(compRes)
+              console.log(classRes)
+              console.log(semRes)
               let compFinal;
               if (compRes.length === 0) {
                 compFinal = [];
