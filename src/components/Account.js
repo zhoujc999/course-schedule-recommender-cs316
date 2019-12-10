@@ -126,8 +126,12 @@ class Account extends Component {
 
       const selectedPrograms = this.state.completed;
       const originalPrograms = this.state.completedOriginal;
+      console.log(selectedPrograms);
+      console.log(originalPrograms);
       const newPrograms = selectedPrograms.filter(p => !originalPrograms.includes(p));
+      console.log(newPrograms);
       const oldPrograms = originalPrograms.filter(p => !selectedPrograms.includes(p));
+      console.log(oldPrograms)
       //need to create new entries, POST to completeds
 
       newPrograms.forEach(p => {
@@ -901,7 +905,7 @@ class Account extends Component {
 
   deleteCompleted(deletedId, headers) {
     const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completeds/";
-    axios.delete(updateProgramUrl+deletedId, {
+    axios.delete(updateProgramUrl+deletedId+"/", {
       headers: headers
     })
     .catch(err => {
