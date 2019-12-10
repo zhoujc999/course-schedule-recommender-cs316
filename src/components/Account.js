@@ -210,11 +210,16 @@ class Account extends Component {
     if (canUpdate === true) {
       const originalSems = this.state.semestersOriginal;
       const selectedSems = this.state.semesters;
-      const newSems = selectedSems.filter(s => (s.sem_num))
+      //delete all entries from sems
+      if (this.state.semsUpdated !== 'INITIAL') {
+        this.deleteSemsAll()
+        .then
 
-      this.setState({ semsUpdated: "SUCCESS" }); //TODO: UPDATE BACKEND/DB
-    } else {
-      this.setState({ semsUpdated: "FAILED" });
+        this.setState({ semsUpdated: "SUCCESS" }); //TODO: UPDATE BACKEND/DB
+      }
+      else {
+        this.setState({ semsUpdated: "FAILED" });
+      }
     }
   }
 
@@ -891,7 +896,7 @@ class Account extends Component {
   createNewProgram(newProgram, headers) {
     const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid";
     axios.post(updateProgramUrl, {
-      netid: this.state.netid,
+      netid: this.state.accountInfo.netid,
       name: newProgram.name,
       type: newProgram.type
     },
