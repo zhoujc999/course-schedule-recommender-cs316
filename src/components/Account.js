@@ -232,6 +232,7 @@ class Account extends Component {
       const DUMMY_TYPE = 'Minor';
       originalSems.forEach(os => {
         os.courses.forEach(c => {
+          console.log(c)
           originalSemsObj.push({
             sem_number: os.sem_num,
             classid: c.code,
@@ -630,8 +631,9 @@ class Account extends Component {
     //Creates Course Forms for each semester
     const courseCodePlaceholder = "ex. AMI215/MATH212/etc.";
     const coursePurposePlaceholder = "ex. Program/T-Req/Fun/etc.";
+    //CHANGE 1
     const taken_options = [
-      ...new Set(this.state.completed.map(prog => prog.name + " " + prog.type))
+      ...new Set(this.state.completed.map(prog => prog.name + ", " + prog.type))
       .add('T-Reqs').add('Fun').add('Other')
     ].map(val => {return {taken_for: val}});
     const courses = semester.courses.map((course, i) => (
@@ -890,8 +892,9 @@ class Account extends Component {
                       let takenFor = progRes.allPrograms.find(p => p.pid === c.pid_id);
                       newSem.courses.push({
                         code: c.classid_id,
-                        taken_for: `${takenFor.name} ${takenFor.type}`
+                        taken_for: `${takenFor.name}, ${takenFor.type}`
                       });
+                      //CHANGE 2
                     });
                   semsFinal.push(newSem);
                 }
