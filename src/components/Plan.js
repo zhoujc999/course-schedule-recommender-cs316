@@ -18,14 +18,13 @@ class Plan extends Component {
         {ps}
       </span>
     ))
-    const name = 5
     return (
       <div className="plan_text">
         <div className="plan_programs">
           {programs}
         </div>
         <div className="plan_user">
-          {`User: ${name}`}
+          {`User: ${planInfo.user}`}
         </div>
         <div className="plan_user_descr">
           {`Description: ${planInfo.description}`}
