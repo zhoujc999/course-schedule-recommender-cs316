@@ -889,7 +889,7 @@ class Account extends Component {
   }
 
   createNewProgram(newProgram, headers) {
-    const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completeds/";
+    const updateProgramUrl = "https://course-schedule-recommender.herokuapp.com/api/completedbynetid";
     axios.post(updateProgramUrl, {
       netid: this.state.netid,
       name: newProgram.name,
