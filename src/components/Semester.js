@@ -24,7 +24,7 @@ class Semester extends Component {
     return (
       <div className="sem_container">
         <div className="semester_text">
-          {"Semester "+sem_data.s_key}
+          {"Semester "+this.props.s_key}
         </div>
         <div className="semester_courses">
           {courses}

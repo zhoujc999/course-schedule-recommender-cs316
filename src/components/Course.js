@@ -22,7 +22,7 @@ class Course extends Component {
           className="course_code"
           data-tip data-for={`p${p_key}s${s_key}c${c_key}`}
         >
-          {course_data.code}
+          {course_data.classid}
         </div>
         <ReactTooltip
           id={`p${p_key}s${s_key}c${c_key}`}
