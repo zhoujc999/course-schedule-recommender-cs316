@@ -230,6 +230,8 @@ class Account extends Component {
       //TODO: replace DUMMY defaultValue
       const DUMMY_NAME = 'History';
       const DUMMY_TYPE = 'Minor';
+      console.log(originalSems)
+      console.log(selectedSems)
       originalSems.forEach(os => {
         os.courses.forEach(c => {
           console.log(c)
@@ -252,6 +254,7 @@ class Account extends Component {
           });
         })
       });
+      this.setState({ semsUpdated: "SUCCESS" });
 
       originalSemsObj.map(obj => this.getSemesterId(obj))
       .then(res => {
