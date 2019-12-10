@@ -118,7 +118,7 @@ class SemesterByNetidView(views.APIView):
 
 
 class CompletedByNetidView(views.APIView):
-    permission_classes = (ReadPermission,)
+    permission_classes = (AllowAny,)
     def get(self, request, format=None):
         student_netid = request.GET.get('netid')
         program_name = request.GET.get('name')
