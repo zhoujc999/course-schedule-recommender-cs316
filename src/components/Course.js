@@ -15,7 +15,15 @@ class Course extends Component {
       course_data, program_dict,
       p_key, s_key, c_key
     } = this.props;
-    let prog = program_dict.find(p => p.pid === course_data.taken_pid);
+    let prog = "";
+    prog = program_dict.find(p => p.pid === course_data.taken_pid);
+    if (prog === "") {
+      return (
+        <div>
+          Loading...
+        </div>
+      )
+    }
     return (
       <div className="course">
         <div

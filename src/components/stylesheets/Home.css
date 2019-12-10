@@ -45,3 +45,9 @@
   font-size: 24px;
   color: #00334e;
 }
+
+.hrstyle_main {
+	border-top: 3px double #00334e;
+  height: 2px;
+  font-weight: 400;
+}

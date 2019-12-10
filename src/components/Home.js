@@ -180,8 +180,15 @@ class Home extends Component {
         />);
     }
     return (
-      <div className="plans">
-        {planComponents}
+      <div>
+        <div className="search">
+          {`Query: ${this.state.selected.map(p => p.value).join(', ')}`}
+        </div>
+        <hr className="hrstyle_main" />
+        <hr className="hrstyle_main" />
+        <div className="plans">
+          {planComponents}
+        </div>
       </div>
     );
   }
