@@ -30,11 +30,11 @@ class Course extends Component {
           type="light"
           effect="float"
         >
-          {`Class Code: ${course_data.code}`}
+          {`Class Code: ${course_data.classid}`}
           <br/>
           {`Class Name: ${course_data.name}`}
           <br />
-          {`Taken For: ${course_data.taken_for}`}
+          {`Taken For: ${course_data.taken_pid}`}
         </ReactTooltip>
       </div>
     );
