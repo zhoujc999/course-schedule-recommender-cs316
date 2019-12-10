@@ -238,8 +238,8 @@ class Account extends Component {
           originalSemsObj.push({
             sem_number: os.sem_num,
             classid: c.code,
-            name: DUMMY_NAME,
-            type: DUMMY_TYPE
+            name: c.taken_for.split(',')[0],
+            type: c.taken_for.split(',')[1]
           });
         })
       });
@@ -249,8 +249,8 @@ class Account extends Component {
           selectedSemsObj.push({
             sem_number: ss.sem_num,
             classid: c.code,
-            name: DUMMY_NAME,
-            type: DUMMY_TYPE
+            name: c.taken_for.split(',')[0],
+            type: c.taken_for.split(',')[1]
           });
         })
       });
