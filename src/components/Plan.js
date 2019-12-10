@@ -39,11 +39,9 @@ class Plan extends Component {
     const { input, ...other } = this.props;
     const semesterVals = [];
     for (var key of Object.keys(input.semesters)) {
-       console.log(key);
-       var num = 1;
-       num = num.toString()
+      console.log(key);
       semesterVals.push(<Semester
-          sem_data={input.semesters.num}
+          sem_data={input.semesters[key]}
           s_key={key}
           key={key}
           {...other}

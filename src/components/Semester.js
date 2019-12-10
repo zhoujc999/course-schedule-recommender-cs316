@@ -12,10 +12,10 @@ class Semester extends Component {
     const { sem_data, ...other } = this.props;
     console.log(this.props);
     const courses = [];
-    for (let i = 0; i < sem_data.sem_data.length; i++) {
+    for (let i = 0; i < sem_data.length; i++) {
       courses.push(
         <Course
-          course_data={sem_data.sem_data[i]}
+          course_data={sem_data[i]}
           c_key={i}
           key={i}
           {...other}
