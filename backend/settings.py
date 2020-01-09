@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ax=c1zkh2-*ks0*oev-0!r-dzwy9z*_rrrxjt9z)4obg#zxa$#'
+SECRET_KEY = ###INSERT SECRET KEY###
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -91,23 +91,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd54j7ddl3nqgp8',
-        'USER': 'xbrvehzsatkrrk',
-        'PASSWORD': '6f4c51d9be60b9546d7baa9ce0117753daa192f82d52d8dc8176334c0d6c4397',
-        'HOST': 'ec2-54-235-92-244.compute-1.amazonaws.com',
-        'PORT': '5432',
     }
 }
-
-#Michael
-#DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-#  DATABASES = {
-    #  'default': {
-        #  'ENGINE': 'django.db.backends.sqlite3',
-        #  'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #  }
-#  }
 
 
 # Password validation
@@ -168,5 +153,3 @@ STATIC_URL = '/static/'
 #  STATIC_ROOT = os.path.join(BASE_DIR, 'build','static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'build','static')]
 
-#Michael
-#del DATABASES['default']['OPTIONS']['sslmode']
